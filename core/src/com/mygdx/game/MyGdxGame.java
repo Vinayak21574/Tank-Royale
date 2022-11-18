@@ -22,10 +22,15 @@ class Element{
 		startY=y-txt.getHeight()/2;
 	}
 
-	public boolean detect(int x,int y){
-		y=900-y;
+	public boolean tap(){
+		int x=Gdx.input.getX();
+		int y=900-Gdx.input.getY();
 		return startX <= x && x <= startX + width && startY <= y && y <= startY + height;
 	}
+
+//	public boolean hover(){
+//		Gdx.input.set
+//	}
 }
 
 public class MyGdxGame extends ApplicationAdapter {
@@ -54,7 +59,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		//batch.draw(quit,arrangeH(home.getWidth()/2,quit),arrangeV(160,quit));
 
 		if(Gdx.input.justTouched()){
-			if(quit.detect(Gdx.input.getX(),Gdx.input.getY())){
+			if(quit.tap()){
 				Gdx.app.exit();
 			}
 		}
