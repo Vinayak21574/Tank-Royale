@@ -12,10 +12,10 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Players implements Screen {
+public class Duo implements Screen {
     MyGdxGame game;
 
-    public Players(MyGdxGame game) {
+    public Duo(MyGdxGame game) {
         this.game = game;
         menu.game= player.game= players.game= load.game= quit.game= name1.game= up1.game= down1.game= tank1.game= play.game=name2.game= up2.game= down2.game=tank2.game=this.game;
     }
@@ -29,15 +29,15 @@ public class Players implements Screen {
     Element name1=new Element("Buttons\\Dim\\EnterName.png",790,697);
     Element up1=new Element("Buttons\\Dim\\Up.png",790,527);
     Element down1=new Element("Buttons\\Bright\\Down.png",790,246);
-    Element tank1=new Element("Tanks\\Left\\A.png",790,425);
-    Element name2=new Element("Buttons\\Dim\\EnterName.png",1349,697);
-    Element up2=new Element("Buttons\\Dim\\Up.png",1349,527);
-    Element down2=new Element("Buttons\\Bright\\Down.png",1349,246);
-    Element tank2=new Element("Tanks\\Left\\A.png",1349,425);
+    Element tank1=new Element("Tanks\\Left\\A.png",790,406);
+    Element name2=new Element("Buttons\\Dim\\EnterName.png",1309,697);
+    Element up2=new Element("Buttons\\Dim\\Up.png",1309,527);
+    Element down2=new Element("Buttons\\Bright\\Down.png",1309,246);
+    Element tank2=new Element("Tanks\\Right\\A.png",1309,406);
     Element play=new Element("Buttons\\Bright\\Play.png",1049,123);
 
-    displayTank current1=new displayTank(tank1,up1,down1);
-    displayTank current2=new displayTank(tank2,up2,down2);
+    displayTank current1=new displayTank("Left",tank1,up1,down1);
+    displayTank current2=new displayTank("Right",tank2,up2,down2);
 
     @Override
     public void render(float delta) {
@@ -64,7 +64,7 @@ public class Players implements Screen {
                 //todo dialog box for quiting
             }
             else if(player.detect()){
-                game.setScreen(new Player(game));
+                game.setScreen(new Solo(game));
             }
             else if(load.detect()){
                 game.setScreen(new Load(game));
@@ -88,7 +88,7 @@ public class Players implements Screen {
                 //Todo
             }
             else if(play.detect()){
-                //todo PLay screen(pause screen also)
+                game.setScreen(new Play(game));
             }
         }
     }

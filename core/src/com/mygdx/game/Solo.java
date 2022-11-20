@@ -12,10 +12,10 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Player implements Screen {
+public class Solo implements Screen {
     MyGdxGame game;
 
-    public Player(MyGdxGame game) {
+    public Solo(MyGdxGame game) {
         this.game = game;
         menu.game= player.game= players.game= load.game= quit.game= name.game= up.game= down.game= tank.game= play.game=this.game;
     }
@@ -26,13 +26,14 @@ public class Player implements Screen {
     Element players=new Element("Buttons\\Dim\\2Players.png",250,554);
     Element load=new Element("Buttons\\Dim\\Load.png",250,345);
     Element quit=new Element("Buttons\\Dim\\Quit.png",250,135);
-    Element name=new Element("Buttons\\Dim\\EnterName.png",1049,675);
+    TextBox name=new TextBox("Buttons\\Dim\\EnterName.png",1049,675,"PLayer1");
     Element up=new Element("Buttons\\Dim\\Up.png",1049,556);
     Element down=new Element("Buttons\\Bright\\Down.png",1049,265);
     Element tank=new Element("Tanks\\Left\\A.png",1049,425);
     Element play=new Element("Buttons\\Bright\\Play.png",1049,123);
 
-    displayTank current=new displayTank(tank,up,down);
+    displayTank current=new displayTank("Left",tank,up,down);
+    Texture selected=new Texture("Buttons\\Bright\\EnterName.png");
 
     @Override
     public void render(float delta) {
@@ -55,7 +56,7 @@ public class Player implements Screen {
                 //todo dialog box for quiting
             }
             else if(players.detect()){
-                game.setScreen(new Players(game));
+                game.setScreen(new Duo(game));
             }
             else if(load.detect()){
                 game.setScreen(new Load(game));
@@ -67,10 +68,11 @@ public class Player implements Screen {
                 current.displayNext();
             }
             else if(name.detect()){
-                //Todo
+                name.Overwrite(selected);
+
             }
             else if(play.detect()){
-                //todo PLay screen(pause screen also)
+                game.setScreen(new Play(game));
             }
         }
     }

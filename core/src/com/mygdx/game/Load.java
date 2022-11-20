@@ -10,7 +10,7 @@ public class Load implements Screen {
 
     public Load(MyGdxGame game) {
         this.game = game;
-        menu.game= player.game= players.game= quit.game= load.game= Gamebar.game=this.game;
+        menu.game= player.game= players.game= quit.game= load.game= Gamebar.game= play.game=this.game;
     }
 
     Element menu=new Element("Screens\\Overflown.png",800,450);
@@ -19,7 +19,9 @@ public class Load implements Screen {
     Element players=new Element("Buttons\\Dim\\2Players.png",250,554);
     Element load=new Element("Buttons\\Bright\\Load.png",250,345);
     Element quit=new Element("Buttons\\Dim\\Quit.png",250,135);
-    Removable Gamebar=new Removable("Buttons\\Bright\\SelectGame.png",1037,683,1288,731,100);
+    Element play=new Element("Buttons\\Dim\\Start_Load.png","Buttons\\Bright\\Start_Load.png",1037,129);
+    subElement Gamebar=new subElement("Buttons\\Bright\\SelectGame.png",1037,683,1288,731,60,60);
+
     Texture highlight=new Texture("Buttons\\Bright\\LoadGame.png");
 
     @Override
@@ -31,6 +33,7 @@ public class Load implements Screen {
         players.Draw();
         load.Draw();
         quit.Draw();
+        play.Draw();
         Gamebar.Draw();
         game.batch.end();
 
@@ -40,16 +43,20 @@ public class Load implements Screen {
                 Gdx.app.exit();
             }
             else if(player.detect()){
-                game.setScreen(new Player(game));
+                game.setScreen(new Solo(game));
             }
             else if(players.detect()){
-                game.setScreen(new Players(game));
+                game.setScreen(new Duo(game));
             }
             else if(Gamebar.detect()){
                 Gamebar.Overwrite(highlight);
-                if(Gamebar.closure()){
+                if(Gamebar.subDetect()){
                     Gamebar.Kick();
                 }
+                play.invert();
+            }
+            else if(play.detect()){
+                //if load game selected the play button is actiavted
             }
         }
     }
