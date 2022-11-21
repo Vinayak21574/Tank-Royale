@@ -5,15 +5,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class Play implements Screen{
-    MyGdxGame game;
-
-    Element battlefield = new Element("Screens\\Fields\\Normal\\A.png",800,450);
-    Element pause=new Element("Buttons\\Bright\\Pause.png",800,766);
+    private MyGdxGame game;
+    private Element battlefield = new Element("Screens\\Fields\\Normal\\A.png",800,450);
+    private Element pause=new Element("Buttons\\Bright\\Pause.png",800,766);
 
     public Play(MyGdxGame game){
         this.game=game;
         //dummy constructor
-        battlefield.game= pause.game=this.game;
+        battlefield.setGame(this.game);
+        pause.setGame(this.game);
     }
 
     @Override

@@ -5,19 +5,23 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class Pause implements Screen{
-    MyGdxGame game;
-
-    Element battlefield = new Element("Screens\\Fields\\Blur\\A.png",800,450);
-    Element resume=new Element("Buttons\\Bright\\Resume.png",800,766);
-    Element save=new Element("Buttons\\Bright\\Save.png",478,451);
-    Element sound=new Element("Buttons\\Bright\\Sound.png","Buttons\\Dim\\Sound.png",700,451);
-    Element music=new Element("Buttons\\Bright\\Music.png","Buttons\\Dim\\Music.png",922,451);
-    Element quit=new Element("Buttons\\Bright\\Back2Menu.png",1144,451);
+    private MyGdxGame game;
+    private Element battlefield = new Element("Screens\\Fields\\Blur\\A.png",800,450);
+    private Element resume=new Element("Buttons\\Bright\\Resume.png",800,766);
+    private Element save=new Element("Buttons\\Bright\\Save.png",478,451);
+    private Element sound=new Element("Buttons\\Bright\\Sound.png","Buttons\\Dim\\Sound.png",700,451);
+    private Element music=new Element("Buttons\\Bright\\Music.png","Buttons\\Dim\\Music.png",922,451);
+    private Element quit=new Element("Buttons\\Bright\\Back2Menu.png",1144,451);
 
     public Pause(MyGdxGame game){
         this.game=game;
         //dummy constructor
-        battlefield.game= resume.game= save.game= sound.game= music.game= quit.game=this.game;
+        battlefield.setGame(this.game);
+        resume.setGame(this.game);
+        save.setGame(this.game);
+        sound.setGame(this.game);
+        music.setGame(this.game);
+        quit.setGame(this.game);
     }
 
     @Override

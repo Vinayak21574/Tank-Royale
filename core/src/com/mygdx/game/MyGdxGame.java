@@ -18,13 +18,62 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 class Element{
-	int midX,midY;
-	int startX,startY;
-	int height,width;
-	Texture txt;
-	Texture comp;
-	MyGdxGame game;
-	boolean inverted=false;
+	private int midX,midY;
+	private int startX,startY;
+	private int height,width;
+	private Texture txt;
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	private Texture comp;
+	private MyGdxGame game;
+	private boolean inverted=false;
+
+	public Texture getComp() {
+		return comp;
+	}
+
+	public void setComp(Texture comp) {
+		this.comp = comp;
+	}
+
+	public MyGdxGame getGame() {
+		return game;
+	}
+
+	public void setGame(MyGdxGame game) {
+		this.game = game;
+	}
+
+	public Texture getTxt() {
+		return txt;
+	}
+
+	public void setTxt(Texture txt) {
+		this.txt = txt;
+	}
+
+	public boolean isInverted() {
+		return inverted;
+	}
+
+	public void setInverted(boolean inverted) {
+		this.inverted = inverted;
+	}
 
 	public Element(){}
 	public Element(String name,int x,int y) {
@@ -115,12 +164,12 @@ class subElement extends Element{
 	}
 }
 class displayTank {
-	Element here;
-	Element ArrowUp;
-	Element ArrowDown;
+	private Element here;
+	private Element ArrowUp;
+	private Element ArrowDown;
 
-	ArrayList<Texture> arr=new ArrayList<>();
-	int count=0;
+	private ArrayList<Texture> arr=new ArrayList<>();
+	private int count=0;
 
 	public displayTank(String Orient,Element Tank,Element Up,Element Down){
 		this.here=Tank;
@@ -141,10 +190,10 @@ class displayTank {
 	public void displayNext(){
 		if(count!=2) {
 			if(count==1){
-				ArrowDown.txt=new Texture("Buttons\\Dim\\Down.png");
+				ArrowDown.setTxt(new Texture("Buttons\\Dim\\Down.png"));
 			}
-			here.txt = arr.get(++count);
-			ArrowUp.txt=new Texture("Buttons\\Bright\\Up.png");
+			here.setTxt(arr.get(++count));
+			ArrowUp.setTxt(new Texture("Buttons\\Bright\\Up.png"));
 			ArrowDown.Refresh();
 			ArrowUp.Refresh();
 			here.Refresh();
@@ -154,10 +203,10 @@ class displayTank {
 	public void displayPrev(){
 		if(count!=0) {
 			if(count==1){
-				ArrowUp.txt=new Texture("Buttons\\Dim\\Up.png");
+				ArrowUp.setTxt(new Texture("Buttons\\Dim\\Up.png"));
 			}
-			here.txt = arr.get(--count);
-			ArrowDown.txt=new Texture("Buttons\\Bright\\Down.png");
+			here.setTxt(arr.get(--count));
+			ArrowDown.setTxt(new Texture("Buttons\\Bright\\Down.png"));
 			ArrowDown.Refresh();
 			ArrowUp.Refresh();
 			here.Refresh();

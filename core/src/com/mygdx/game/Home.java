@@ -5,16 +5,18 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class Home implements Screen {
-    MyGdxGame game;
+    private MyGdxGame game;
 
     public Home(MyGdxGame game) {
         this.game = game;
-        home.game=start.game=quit.game=this.game;
+        home.setGame(this.game);
+        start.setGame(this.game);
+        quit.setGame(this.game);
     }
 
-    Element home = new Element("Screens\\Home.png",800,450);
-    Element start = new Element("Buttons\\Bright\\Start.png",home.width/2,315);
-    Element quit = new Element("Buttons\\Bright\\Quit_Home.png",home.width/2,160);
+    private Element home = new Element("Screens\\Home.png",800,450);
+    private Element start = new Element("Buttons\\Bright\\Start.png", home.getWidth() /2,315);
+    private Element quit = new Element("Buttons\\Bright\\Quit_Home.png", home.getWidth() /2,160);
 
     @Override
     public void render(float delta) {

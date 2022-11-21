@@ -6,23 +6,30 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 
 public class Settings implements Screen {
-    MyGdxGame game;
+    private MyGdxGame game;
 
     public Settings(MyGdxGame game) {
         this.game = game;
-        menu.game= player.game= players.game= load.game= quit.game= close.game= sound.game= music.game= about.game=this.game;
+        menu.setGame(this.game);
+        player.setGame(this.game);
+        players.setGame(this.game);
+        load.setGame(this.game);
+        quit.setGame(this.game);
+        close.setGame(this.game);
+        sound.setGame(this.game);
+        music.setGame(this.game);
+        about.setGame(this.game);
     }
 
-    Element menu=new Element("Screens\\Menu_Blur.png",800,450);
-
-    Element player=new Element("Buttons\\Bright\\1Player.png",250,765);
-    Element players=new Element("Buttons\\Bright\\2Players.png",250,554);
-    Element load=new Element("Buttons\\Bright\\Load.png",250,345);
-    Element quit=new Element("Buttons\\Bright\\Quit.png",250,135);
-    Element close=new Element("Buttons\\Bright\\Close_Menu.png",1547,848);
-    Element sound=new Element("Buttons\\Bright\\Sound_Menu.png","Buttons\\Dim\\Sound_Menu.png",1525,740);
-    Element music=new Element("Buttons\\Bright\\Music_Menu.png","Buttons\\Dim\\Music_Menu.png",1525,627);
-    Element about=new Element("Buttons\\Bright\\About_Menu.png",1525,514);
+    private Element menu=new Element("Screens\\Menu_Blur.png",800,450);
+    private Element player=new Element("Buttons\\Bright\\1Player.png",250,765);
+    private Element players=new Element("Buttons\\Bright\\2Players.png",250,554);
+    private Element load=new Element("Buttons\\Bright\\Load.png",250,345);
+    private Element quit=new Element("Buttons\\Bright\\Quit.png",250,135);
+    private Element close=new Element("Buttons\\Bright\\Close_Menu.png",1547,848);
+    private Element sound=new Element("Buttons\\Bright\\Sound_Menu.png","Buttons\\Dim\\Sound_Menu.png",1525,740);
+    private Element music=new Element("Buttons\\Bright\\Music_Menu.png","Buttons\\Dim\\Music_Menu.png",1525,627);
+    private Element about=new Element("Buttons\\Bright\\About_Menu.png",1525,514);
 
     @Override
     public void render(float delta) {

@@ -6,23 +6,29 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 
 public class Load implements Screen {
-    MyGdxGame game;
+    private MyGdxGame game;
 
     public Load(MyGdxGame game) {
         this.game = game;
-        menu.game= player.game= players.game= quit.game= load.game= Gamebar.game= play.game=this.game;
+        menu.setGame(this.game);
+        player.setGame(this.game);
+        players.setGame(this.game);
+        quit.setGame(this.game);
+        load.setGame(this.game);
+        Gamebar.setGame(this.game);
+        play.setGame(this.game);
     }
 
-    Element menu=new Element("Screens\\Overflown.png",800,450);
+    private Element menu=new Element("Screens\\Overflown.png",800,450);
 
-    Element player=new Element("Buttons\\Dim\\1Player.png",250,765);
-    Element players=new Element("Buttons\\Dim\\2Players.png",250,554);
-    Element load=new Element("Buttons\\Bright\\Load.png",250,345);
-    Element quit=new Element("Buttons\\Dim\\Quit.png",250,135);
-    Element play=new Element("Buttons\\Dim\\Start_Load.png","Buttons\\Bright\\Start_Load.png",1037,129);
-    subElement Gamebar=new subElement("Buttons\\Bright\\SelectGame.png",1037,683,1288,731,60,60);
+    private Element player=new Element("Buttons\\Dim\\1Player.png",250,765);
+    private Element players=new Element("Buttons\\Dim\\2Players.png",250,554);
+    private Element load=new Element("Buttons\\Bright\\Load.png",250,345);
+    private Element quit=new Element("Buttons\\Dim\\Quit.png",250,135);
+    private Element play=new Element("Buttons\\Dim\\Start_Load.png","Buttons\\Bright\\Start_Load.png",1037,129);
+    private subElement Gamebar=new subElement("Buttons\\Bright\\SelectGame.png",1037,683,1288,731,60,60);
 
-    Texture highlight=new Texture("Buttons\\Bright\\LoadGame.png");
+    private Texture highlight=new Texture("Buttons\\Bright\\LoadGame.png");
 
     @Override
     public void render(float delta) {
@@ -51,19 +57,19 @@ public class Load implements Screen {
             else if(Gamebar.detect()){
                 if(Gamebar.subDetect()){
                     Gamebar.Kick();
-                    if(play.inverted){
+                    if(play.isInverted()){
                         play.invert();
                     }
                 }
                 else{
                     Gamebar.Overwrite(highlight);
-                    if(!play.inverted){
+                    if(!play.isInverted()){
                         play.invert();
                     }
                 }
             }
             else if(play.detect()){
-                if(play.inverted){
+                if(play.isInverted()){
                     game.setScreen(new Play(game));
                 }
             }
