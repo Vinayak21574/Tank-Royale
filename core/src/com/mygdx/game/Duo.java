@@ -1,16 +1,8 @@
 package com.mygdx.game;
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
-import org.w3c.dom.Text;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 public class Duo implements Screen {
     MyGdxGame game;
