@@ -24,6 +24,7 @@ class Element{
 	Texture txt;
 	Texture comp;
 	MyGdxGame game;
+	boolean inverted=false;
 
 	public Element(){}
 	public Element(String name,int x,int y) {
@@ -69,10 +70,12 @@ class Element{
 	}
 
 	public void Kick(){
+
 		Overwrite(new Texture("Buttons\\Dim\\Blank.png"));
 	}
 
 	public void invert(){
+		inverted=!(inverted);
 		Texture temp=comp;
 		comp=txt;
 		txt=temp;
@@ -110,27 +113,6 @@ class subElement extends Element{
 		y=900-y;
 		return startX_ <= x && x <= startX_ + range_x && startY_ <= y && y <= startY_ + range_y;
 	}
-}
-
-class TextBox extends Element{
-	TextField field;
-	public TextBox(String name, int x, int y,String initial) {
-		super(name,x,y);
-		TextField.TextFieldStyle style=new TextField.TextFieldStyle();
-		style.font=new BitmapFont();
-		style.fontColor= Color.WHITE;
-		field=new TextField(initial,style);
-		field.setPosition(912,672);
-		field.setAlignment(Align.center);
-		field.setSize(274,50);
-	}
-	@Override
-	public void Draw(){
-		game.batch.draw(this.txt,this.startX,this.startY);
-		//field.draw(game.batch,1);
-	}
-
-
 }
 class displayTank {
 	Element here;
@@ -183,22 +165,6 @@ class displayTank {
 	}
 }
 
-class Player{
-	String name;
-	//Sprite Tank
-	//Score
-
-	public Player(String name) {
-		this.name = name;
-	}
-}
-
-class Tank{
-	//Health
-	//coordinates
-	//Speed,....etc.....
-}
-
 public class MyGdxGame extends Game {
 	SpriteBatch batch;
 	@Override
@@ -206,7 +172,6 @@ public class MyGdxGame extends Game {
 		batch = new SpriteBatch();
 		setScreen(new Home(this));
 	}
-
 
 	@Override
 	public void setScreen(Screen screen) {
@@ -216,8 +181,5 @@ public class MyGdxGame extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-//		home.txt.dispose();
-//		start.txt.dispose();
-//		quit.txt.dispose();
 	}
 }

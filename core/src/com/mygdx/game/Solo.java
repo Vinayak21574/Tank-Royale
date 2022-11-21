@@ -26,7 +26,7 @@ public class Solo implements Screen {
     Element players=new Element("Buttons\\Dim\\2Players.png",250,554);
     Element load=new Element("Buttons\\Dim\\Load.png",250,345);
     Element quit=new Element("Buttons\\Dim\\Quit.png",250,135);
-    TextBox name=new TextBox("Buttons\\Dim\\EnterName.png",1049,675,"PLayer1");
+    Element name=new Element("Buttons\\Dim\\DefaultName.png",1049,675);
     Element up=new Element("Buttons\\Dim\\Up.png",1049,556);
     Element down=new Element("Buttons\\Bright\\Down.png",1049,265);
     Element tank=new Element("Tanks\\Left\\A.png",1049,425);

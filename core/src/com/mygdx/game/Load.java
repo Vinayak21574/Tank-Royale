@@ -49,14 +49,23 @@ public class Load implements Screen {
                 game.setScreen(new Duo(game));
             }
             else if(Gamebar.detect()){
-                Gamebar.Overwrite(highlight);
                 if(Gamebar.subDetect()){
                     Gamebar.Kick();
+                    if(play.inverted){
+                        play.invert();
+                    }
                 }
-                play.invert();
+                else{
+                    Gamebar.Overwrite(highlight);
+                    if(!play.inverted){
+                        play.invert();
+                    }
+                }
             }
             else if(play.detect()){
-                //if load game selected the play button is actiavted
+                if(play.inverted){
+                    game.setScreen(new Play(game));
+                }
             }
         }
     }

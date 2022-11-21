@@ -26,14 +26,14 @@ public class Duo implements Screen {
     Element players=new Element("Buttons\\Bright\\2Players.png",250,554);
     Element load=new Element("Buttons\\Dim\\Load.png",250,345);
     Element quit=new Element("Buttons\\Dim\\Quit.png",250,135);
-    Element name1=new Element("Buttons\\Dim\\EnterName.png",790,697);
+    Element name1=new Element("Buttons\\Dim\\DefaultName.png",790,697);
     Element up1=new Element("Buttons\\Dim\\Up.png",790,527);
     Element down1=new Element("Buttons\\Bright\\Down.png",790,246);
-    Element tank1=new Element("Tanks\\Left\\A.png",790,406);
-    Element name2=new Element("Buttons\\Dim\\EnterName.png",1309,697);
+    Element tank1=new Element("Tanks\\Left\\A.png",790,395);
+    Element name2=new Element("Buttons\\Dim\\DefaultName.png",1309,697);
     Element up2=new Element("Buttons\\Dim\\Up.png",1309,527);
     Element down2=new Element("Buttons\\Bright\\Down.png",1309,246);
-    Element tank2=new Element("Tanks\\Right\\A.png",1309,406);
+    Element tank2=new Element("Tanks\\Right\\A.png",1285,395);
     Element play=new Element("Buttons\\Bright\\Play.png",1049,123);
 
     displayTank current1=new displayTank("Left",tank1,up1,down1);

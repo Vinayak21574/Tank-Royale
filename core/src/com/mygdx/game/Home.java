@@ -29,12 +29,12 @@ public class Home implements Screen {
                 game.setScreen(new Menu(game));
                 dispose();
             }
-        }
-        if(Gdx.input.justTouched()){
-            if(quit.detect()){
+            else if(quit.detect()){
+                //TODO quit and start font match
                 Gdx.app.exit();
             }
         }
+
         game.batch.end();
     }
 
