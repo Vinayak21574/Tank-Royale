@@ -1,13 +1,19 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.ScreenUtils;
 
-import java.io.Serializable;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -113,6 +119,7 @@ class Element{
 	}
 
 	public void Kick(){
+
 		Overwrite(new Texture("Buttons\\Dim\\Blank.png"));
 	}
 

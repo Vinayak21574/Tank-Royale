@@ -5,20 +5,24 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class Menu implements Screen {
-    MyGdxGame game;
+    private MyGdxGame game;
 
     public Menu(MyGdxGame game) {
         this.game = game;
-        menu.game= player.game= players.game= load.game= quit.game= settings.game=this.game;
+        menu.setGame(this.game);
+        player.setGame(this.game);
+        players.setGame(this.game);
+        load.setGame(this.game);
+        quit.setGame(this.game);
+        settings.setGame(this.game);
     }
 
-    Element menu=new Element("Screens\\Menu.png",800,450);
-
-    Element player=new Element("Buttons\\Bright\\1Player.png",250,765);
-    Element players=new Element("Buttons\\Bright\\2Players.png",250,554);
-    Element load=new Element("Buttons\\Bright\\Load.png",250,345);
-    Element quit=new Element("Buttons\\Bright\\Quit.png",250,135);
-    Element settings=new Element("Buttons\\Dim\\Settings.png",1547,848);
+    private Element menu=new Element("Screens\\Menu.png",800,450);
+    private Element player=new Element("Buttons\\Bright\\1Player.png",250,765);
+    private Element players=new Element("Buttons\\Bright\\2Players.png",250,554);
+    private Element load=new Element("Buttons\\Bright\\Load.png",250,345);
+    private Element quit=new Element("Buttons\\Bright\\Quit.png",250,135);
+    private Element settings=new Element("Buttons\\Dim\\Settings.png",1547,848);
     @Override
     public void render(float delta) {
         ScreenUtils.clear(1,0,0,1);

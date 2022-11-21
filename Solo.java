@@ -1,12 +1,19 @@
 package com.mygdx.game;
-
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Solo implements Screen {
-    private final MyGdxGame game;
+    private MyGdxGame game;
 
     public Solo(MyGdxGame game) {
         this.game = game;
@@ -22,19 +29,19 @@ public class Solo implements Screen {
         play.setGame(this.game);
     }
 
-    private final Element menu=new Element("Screens\\Overflown.png",800,450);
-    private final Element player=new Element("Buttons\\Bright\\1Player.png",250,765);
-    private final Element players=new Element("Buttons\\Dim\\2Players.png",250,554);
-    private final Element load=new Element("Buttons\\Dim\\Load.png",250,345);
-    private final Element quit=new Element("Buttons\\Dim\\Quit.png",250,135);
-    private final Element name=new Element("Buttons\\Dim\\DefaultName.png",1049,675);
-    private final Element up=new Element("Buttons\\Dim\\Up.png",1049,556);
-    private final Element down=new Element("Buttons\\Bright\\Down.png",1049,265);
-    private final Element tank=new Element("Tanks\\Left\\A.png",1049,425);
-    private final Element play=new Element("Buttons\\Bright\\Play.png",1049,123);
+    private Element menu=new Element("Screens\\Overflown.png",800,450);
+    private Element player=new Element("Buttons\\Bright\\1Player.png",250,765);
+    private Element players=new Element("Buttons\\Dim\\2Players.png",250,554);
+    private Element load=new Element("Buttons\\Dim\\Load.png",250,345);
+    private Element quit=new Element("Buttons\\Dim\\Quit.png",250,135);
+    private Element name=new Element("Buttons\\Dim\\DefaultName.png",1049,675);
+    private Element up=new Element("Buttons\\Dim\\Up.png",1049,556);
+    private Element down=new Element("Buttons\\Bright\\Down.png",1049,265);
+    private Element tank=new Element("Tanks\\Left\\A.png",1049,425);
+    private Element play=new Element("Buttons\\Bright\\Play.png",1049,123);
 
-    private final displayTank current=new displayTank("Left",tank,up,down);
-    private final Texture selected=new Texture("Buttons\\Bright\\EnterName.png");
+    private displayTank current=new displayTank("Left",tank,up,down);
+    private Texture selected=new Texture("Buttons\\Bright\\EnterName.png");
 
     @Override
     public void render(float delta) {
