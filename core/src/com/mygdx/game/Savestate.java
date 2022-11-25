@@ -3,11 +3,11 @@ package com.mygdx.game;
 import java.io.Serializable;
 
 public class Savestate implements Serializable {
-    private boolean AI;
+    boolean AI;
 
-    private Tank Tank1;
+    Tank Tank1;
 
-    private Tank Tank2;
+    Tank Tank2;
 
-    
+
 }
