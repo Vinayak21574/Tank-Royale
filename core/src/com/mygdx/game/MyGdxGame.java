@@ -9,9 +9,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.physics.bullet.Bullet;
+
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -230,5 +233,131 @@ public class MyGdxGame extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
+	}
+}
+
+class Tank {
+	private Element skin;
+	private ArrayList<Weapon> ammo;
+
+	private float health;
+
+	private float angle;
+
+	private String state;
+
+	private float weight;
+
+	void move(){
+
+	}
+
+	void fire(){
+		//this.angle
+	}
+
+	void takeDamage(float damage){
+		setHealth(this.health-damage);
+	}
+
+	public Element getSkin() {
+		return skin;
+	}
+
+	public void setSkin(Element skin) {
+		this.skin = skin;
+	}
+
+	public ArrayList<Weapon> getAmmo() {
+		return ammo;
+	}
+
+	public void setAmmo(ArrayList<Weapon> ammo) {
+		this.ammo = ammo;
+	}
+
+	public float getHealth() {
+		return health;
+	}
+
+	public void setHealth(float health) {
+		this.health = health;
+	}
+
+	public float getAngle() {
+		return angle;
+	}
+
+	public void setAngle(float angle) {
+		this.angle = angle;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public float getWeight() {
+		return weight;
+	}
+
+	public void setWeight(float weight) {
+		this.weight = weight;
+	}
+}
+
+
+class Weapon extends Bullet {
+	private float power;
+	private Element type;
+	private float radius;
+	private float damage;
+	private float gravity;
+
+	public float getPower() {
+		return power;
+	}
+
+	public void setPower(float power) {
+		this.power = power;
+	}
+
+	public Element getType() {
+		return type;
+	}
+
+	public void setType(Element type) {
+		this.type = type;
+	}
+
+	public float getRadius() {
+		return radius;
+	}
+
+	public void setRadius(float radius) {
+		this.radius = radius;
+	}
+
+	public float getDamage() {
+		return damage;
+	}
+
+	public void setDamage(float damage) {
+		this.damage = damage;
+	}
+
+	public float getGravity() {
+		return gravity;
+	}
+
+	public void setGravity(float gravity) {
+		this.gravity = gravity;
+	}
+
+	void explode(){
+
 	}
 }
