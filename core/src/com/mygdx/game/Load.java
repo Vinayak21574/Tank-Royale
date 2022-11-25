@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 
-public class Load implements Screen {
+public class Load implements Screen{
     private MyGdxGame game;
 
     public Load(MyGdxGame game) {

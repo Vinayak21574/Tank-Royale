@@ -13,7 +13,8 @@ public class Play implements Screen{
         this.game=game;
         //dummy constructor
         battlefield.setGame(this.game);
-        pause.setGame(this.game);
+        pause.
+                setGame(this.game);
     }
 
     @Override

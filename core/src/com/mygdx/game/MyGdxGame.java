@@ -140,10 +140,10 @@ class Element{
 }
 
 class subElement extends Element{
-	int startX_;
-	int startY_;
-	int range_x;
-	int range_y;
+	private int startX_;
+	private int startY_;
+	private int range_x;
+	private int range_y;
 
 	public subElement(String name, int x, int y,int X_,int Y_,int Rx,int Ry) {
 		super(name,x,y);
