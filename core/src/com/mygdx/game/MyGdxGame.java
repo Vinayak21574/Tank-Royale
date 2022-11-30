@@ -26,6 +26,38 @@ class Element{
 	private int height,width;
 	private Texture txt;
 
+	public int getMidX() {
+		return midX;
+	}
+
+	public void setMidX(int midX) {
+		this.midX = midX;
+	}
+
+	public int getMidY() {
+		return midY;
+	}
+
+	public void setMidY(int midY) {
+		this.midY = midY;
+	}
+
+	public int getStartX() {
+		return startX;
+	}
+
+	public void setStartX(int startX) {
+		this.startX = startX;
+	}
+
+	public int getStartY() {
+		return startY;
+	}
+
+	public void setStartY(int startY) {
+		this.startY = startY;
+	}
+
 	public int getHeight() {
 		return height;
 	}
@@ -237,76 +269,70 @@ public class MyGdxGame extends Game {
 }
 
 class Tank {
-	private Element skin;
-	private ArrayList<Weapon> ammo;
+	int x0,y0;
+	boolean flipped=false;
 
-	private float health;
+	MyGdxGame game;
 
-	private float angle;
+	Texture body=new Texture("Tanks\\Left\\Body.png");
+	Texture cap=new Texture("Tanks\\Left\\CannonCap.png");
+	Texture cannon=new Texture("Tanks\\Left\\Cannon.png");
 
-	private String state;
+	Sprite Body=new Sprite(body,0,0, body.getWidth(), body.getHeight());
+	Sprite Cap=new Sprite(cap,0,0, cap.getWidth(), cap.getHeight());
+	Sprite Cannon=new Sprite(cannon,0,0, cannon.getWidth(), cannon.getHeight());
 
-	private float weight;
-
-	void move(){
-
+	void locate(int x,int y){
+		Cannon.setPosition(x,y);
+		if(!flipped){
+			Body.setPosition(x - 180, y - 102);
+			Cap.setPosition(x - 20, y - 8);
+		}
+		else{
+			Body.setPosition(x -116, y - 102);
+			Cap.setPosition(x -12, y - 8);
+		}
+		x0=x;
+		y0=y;
 	}
 
-	void fire(){
-		//this.angle
+	void rotate(){
+		int x=Gdx.input.getX();
+		int y=900-Gdx.input.getY();
+		float angle=(float)Math.toDegrees(Math.atan2(y-y0-cannon.getHeight()/2,x-x0));
+		Cannon.setRotation(angle);
+		Cannon.setOrigin(0,cannon.getHeight()/2);
+		if( x<x0 && !flipped){
+			Body.setFlip(true,false);
+			Cap.setFlip(true,false);
+			flipped=!flipped;
+
+		}
+		else if(x>x0 && flipped){
+			Body.setFlip(false,false);
+			Cap.setFlip(false,false);
+			flipped=!flipped;
+		}
+		locate(x0,y0);
 	}
 
-	void takeDamage(float damage){
-		setHealth(this.health-damage);
+	void draw(){
+		Body.draw(game.batch);
+		Cannon.draw(game.batch);
+		Cap.draw(game.batch);
 	}
 
-	public Element getSkin() {
-		return skin;
+	void move(boolean value){
+		if(value){
+			locate(x0-6,y0);
+		}
+		else{
+			locate(x0+6,y0);
+		}
+		rotate();
 	}
 
-	public void setSkin(Element skin) {
-		this.skin = skin;
-	}
 
-	public ArrayList<Weapon> getAmmo() {
-		return ammo;
-	}
-
-	public void setAmmo(ArrayList<Weapon> ammo) {
-		this.ammo = ammo;
-	}
-
-	public float getHealth() {
-		return health;
-	}
-
-	public void setHealth(float health) {
-		this.health = health;
-	}
-
-	public float getAngle() {
-		return angle;
-	}
-
-	public void setAngle(float angle) {
-		this.angle = angle;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public float getWeight() {
-		return weight;
-	}
-
-	public void setWeight(float weight) {
-		this.weight = weight;
-	}
 }
 
 

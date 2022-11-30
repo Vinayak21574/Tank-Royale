@@ -28,8 +28,8 @@ public class Home implements Screen {
 
         if(Gdx.input.justTouched()){
             if(start.detect()){
-                game.setScreen(new Menu(game));
-                dispose();
+                game.setScreen(new Play(game));
+                //game.setScreen(new Menu(game));
             }
             else if(quit.detect()){
                 //TODO quit and start font match
