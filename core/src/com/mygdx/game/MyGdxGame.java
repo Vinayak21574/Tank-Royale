@@ -1,22 +1,14 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.bullet.Bullet;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.physics.bullet.Bullet;
 
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -133,6 +125,14 @@ class Element{
 	}
 
 	public void Draw(){
+		game.batch.draw(this.txt,this.startX,this.startY);
+	}
+
+	public void Draw(int x,int y){
+		midX=x;
+		midY=y;
+		startX=x-txt.getWidth()/2;
+		startY=y-txt.getHeight()/2;
 		game.batch.draw(this.txt,this.startX,this.startY);
 	}
 
@@ -270,9 +270,14 @@ public class MyGdxGame extends Game {
 
 class Tank {
 	int x0,y0;
+	int x1,y1;
+	float Cangle;
 	boolean flipped=false;
+	double power;
+	boolean fired;
 
 	MyGdxGame game;
+	Trajectory traj;
 
 	Texture body=new Texture("Tanks\\Left\\Body.png");
 	Texture cap=new Texture("Tanks\\Left\\CannonCap.png");
@@ -282,15 +287,16 @@ class Tank {
 	Sprite Cap=new Sprite(cap,0,0, cap.getWidth(), cap.getHeight());
 	Sprite Cannon=new Sprite(cannon,0,0, cannon.getWidth(), cannon.getHeight());
 
+	ArrayList<Sprite> collect=new ArrayList<>();
+
+	public Tank(MyGdxGame game){
+		this.game= game;
+		collect.add(Body);collect.add(Cannon);collect.add(Cap);
+		traj=new Trajectory(game);
+	}
 	void locate(int x,int y){
-		Cannon.setPosition(x,y);
-		if(!flipped){
-			Body.setPosition(x - 180, y - 102);
-			Cap.setPosition(x - 20, y - 8);
-		}
-		else{
-			Body.setPosition(x -116, y - 102);
-			Cap.setPosition(x -12, y - 8);
+		for(Sprite i:collect){
+			i.setPosition(x-225,y-125);
 		}
 		x0=x;
 		y0=y;
@@ -299,27 +305,42 @@ class Tank {
 	void rotate(){
 		int x=Gdx.input.getX();
 		int y=900-Gdx.input.getY();
-		float angle=(float)Math.toDegrees(Math.atan2(y-y0-cannon.getHeight()/2,x-x0));
-		Cannon.setRotation(angle);
-		Cannon.setOrigin(0,cannon.getHeight()/2);
-		if( x<x0 && !flipped){
-			Body.setFlip(true,false);
-			Cap.setFlip(true,false);
-			flipped=!flipped;
+
+		Cangle=(float)Math.toDegrees(Math.atan2(y-y0,x-x0));
+
+		if(Cangle<0){
+			Cangle+=360;
+		}
+
+		if(validAngle()){
+			Cannon.setRotation(Cangle);
+			Cannon.setOrigin(225, 125);
+
+			if (Cangle>90 && Cangle<270 && !flipped) {
+				flip(true);
+
+			} else if (flipped && !(Cangle>90 && Cangle<270)) {
+				flip(false);
+			}
+
+			locate(x0, y0);
 
 		}
-		else if(x>x0 && flipped){
-			Body.setFlip(false,false);
-			Cap.setFlip(false,false);
-			flipped=!flipped;
+
+		getTip(Cangle);
+		traj.flipped=flipped;
+		setPower(x,y);
+		if(validAngle()){
+			traj.setStart(x1,y1,Cangle,power);
 		}
-		locate(x0,y0);
+		traj.draw();
+
 	}
 
 	void draw(){
-		Body.draw(game.batch);
-		Cannon.draw(game.batch);
-		Cap.draw(game.batch);
+		for(Sprite i:collect){
+			i.draw(game.batch);
+		}
 	}
 
 	void move(boolean value){
@@ -329,12 +350,88 @@ class Tank {
 		else{
 			locate(x0+6,y0);
 		}
-		rotate();
 	}
+
+	void getTip(double angle){
+		x1=x0+(int)(Math.cos(Math.toRadians(angle))*(150) + Math.sin(Math.toRadians(angle))*0);
+		y1=y0+(int)(Math.sin(Math.toRadians(angle))*(150) + Math.cos(Math.toRadians(angle))*0);
+	}
+
+
+	boolean validAngle(){
+		return !(Cangle<=340 && Cangle>=200);
+	}
+
+	void flip(boolean value){
+		for (Sprite i : collect) {
+			if (i != Cannon) {
+				i.setFlip(value, false);
+			}
+		}
+		flipped = !flipped;
+	}
+
+	void setPower(int x,int y){
+		power= 6/Math.pow(Math.pow(x-x1,2)+Math.pow(y-y1,2),0.5f);
+	}
+
+	void fire(){
+
+	}
+
 
 
 }
 
+class Trajectory{
+	//g==10
+	int x0,y0;
+	int start=0;
+	int gap;
+	double angle;
+	double velocity;
+	boolean flipped;
+
+
+	Texture DOT=new Texture("Tracks\\Trackball.png");
+	Sprite dot= new Sprite(DOT,0,0, DOT.getWidth(), DOT.getHeight());
+	MyGdxGame game;
+
+	public Trajectory(MyGdxGame game) {
+		this.game = game;
+	}
+
+	int getY(int x){
+		return (int)(x*(float)Math.tan(Math.toRadians(angle)) -5*x*x*velocity*velocity/(float)(Math.pow(Math.cos(Math.toRadians(angle)),2)));
+	}
+	void setStart(int x,int y,double angle,double power){
+		x0=x;
+		y0=y;
+		this.angle=angle;
+		this.velocity=power;
+		gap=(int)(Math.pow(power,-1)/(float)2);
+	}
+
+	void draw(){
+		for(int i=0;i<10;i++){
+			if(flipped){
+				dot.setPosition(x0 + start - 10, y0 + getY(start) - 10);
+				start-=gap;
+			}
+			else{
+				dot.setPosition(x0 + start - 10, y0 + getY(start) - 10);
+				start+=gap;
+			}
+			if(y0 + getY(start) - 10<0){
+				break;
+			}
+
+			dot.draw(game.batch);
+		}
+		start=0;
+	}
+
+}
 
 class Weapon extends Bullet {
 	private float power;

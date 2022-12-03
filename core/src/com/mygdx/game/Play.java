@@ -3,6 +3,8 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Cursor;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -11,7 +13,8 @@ import java.lang.Math;
 public class Play implements Screen{
     private MyGdxGame game;
 
-    Tank tank=new Tank();
+
+    Tank tank=new Tank(game);;
 
     //private Element tank=new Element("Tanks\\Left\\B.png",300,150);
 
@@ -20,6 +23,7 @@ public class Play implements Screen{
     public Play(MyGdxGame game){
         this.game=game;
         tank.game=game;
+        tank.traj.game=game;
         tank.locate(200,200);
     }
 
@@ -39,11 +43,14 @@ public class Play implements Screen{
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
             if(Gdx.input.isKeyPressed(Input.Keys.A)){
                 tank.move(true);
-                Gdx.app.log("Move>", "Forward");
+                //Gdx.app.log("Move>", "Forward");
             }
             else if(Gdx.input.isKeyPressed(Input.Keys.D)){
                 tank.move(false);
-                Gdx.app.log("Move>", "Backward");
+                //Gdx.app.log("Move>", "Backward");
+            }
+            else if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+                tank.fire();
             }
         }
 //        s_tank.draw(game.batch);
