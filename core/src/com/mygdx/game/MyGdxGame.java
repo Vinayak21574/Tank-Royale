@@ -350,6 +350,7 @@ class Tank {
 		else{
 			locate(x0+6,y0);
 		}
+		rotate();
 	}
 
 	void getTip(double angle){
