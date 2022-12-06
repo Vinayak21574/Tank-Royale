@@ -282,11 +282,12 @@ class Tank {
 	Texture body=new Texture("Tanks\\Left\\Body.png");
 	Texture cap=new Texture("Tanks\\Left\\CannonCap.png");
 	Texture cannon=new Texture("Tanks\\Left\\Cannon.png");
+	Texture bullet=new Texture("Bullet\\Bullet.png");
 
 	Sprite Body=new Sprite(body,0,0, body.getWidth(), body.getHeight());
 	Sprite Cap=new Sprite(cap,0,0, cap.getWidth(), cap.getHeight());
 	Sprite Cannon=new Sprite(cannon,0,0, cannon.getWidth(), cannon.getHeight());
-
+	Sprite Bullet=new Sprite(bullet,0,0, bullet.getWidth(), bullet.getHeight());
 	ArrayList<Sprite> collect=new ArrayList<>();
 
 	public Tank(MyGdxGame game){
@@ -373,14 +374,8 @@ class Tank {
 	}
 
 	void setPower(int x,int y){
-		power= 6/Math.pow(Math.pow(x-x1,2)+Math.pow(y-y1,2),0.5f);
+		power= Math.pow(Math.pow(x-x1,2)+Math.pow(y-y1,2),0.5f);
 	}
-
-	void fire(){
-
-	}
-
-
 
 }
 
@@ -392,6 +387,7 @@ class Trajectory{
 	double angle;
 	double velocity;
 	boolean flipped;
+	int slowfactor=2;
 
 
 	Texture DOT=new Texture("Tracks\\Trackball.png");
@@ -403,33 +399,65 @@ class Trajectory{
 	}
 
 	int getY(int x){
-		return (int)(x*(float)Math.tan(Math.toRadians(angle)) -5*x*x*velocity*velocity/(float)(Math.pow(Math.cos(Math.toRadians(angle)),2)));
+		return (int)(x*(float)Math.tan(Math.toRadians(angle)) -5*x*x/((velocity*velocity)*(float)(Math.pow(Math.cos(Math.toRadians(angle)),2))));
 	}
 	void setStart(int x,int y,double angle,double power){
 		x0=x;
 		y0=y;
 		this.angle=angle;
-		this.velocity=power;
-		gap=(int)(Math.pow(power,-1)/(float)2);
+		this.velocity=power/6;
+		gap=(int)(power/10);
+	}
+
+	double derivative(int x){
+		return Math.toDegrees(((float)Math.tan(Math.toRadians(angle)) -10*x/(velocity*velocity*(float)(Math.pow(Math.cos(Math.toRadians(angle)),2)))));
 	}
 
 	void draw(){
 		for(int i=0;i<10;i++){
-			if(flipped){
+			if(angle<=87 || angle>=93) {
 				dot.setPosition(x0 + start - 10, y0 + getY(start) - 10);
-				start-=gap;
 			}
 			else{
-				dot.setPosition(x0 + start - 10, y0 + getY(start) - 10);
-				start+=gap;
-			}
-			if(y0 + getY(start) - 10<0){
+				dot.setPosition(x0 - 10, y0 +gap*8- 10);
+				dot.draw(game.batch);
+				dot.setPosition(x0 - 10, y0 +gap*4- 10);
+				dot.draw(game.batch);
+				dot.setPosition(x0 - 10, y0 - 10);
+				dot.draw(game.batch);
 				break;
 			}
 
+			if(flipped){
+				start-=gap;
+			}
+			else{
+				start+=gap;
+			}
+
+			if(y0 + getY(start) - 10<0){
+				break;
+			}
 			dot.draw(game.batch);
 		}
 		start=0;
+	}
+
+	void follow(Sprite missile){
+		int x=(int)(x0+velocity*Math.cos(Math.toRadians(angle))*start/slowfactor-33);
+		int y=(int)(y0+velocity*Math.sin(Math.toRadians(angle))*start/slowfactor-5*start*start/(slowfactor*slowfactor)-33);
+		//Gdx.app.log("Angle",String.valueOf(derivative(start)));
+
+		if((x<1600 && x>0) && (y<900 && y>=0)){
+			missile.setRotation((int)derivative(start));
+			missile.setPosition(x, y);
+			missile.draw(game.batch);
+			start+=1;
+		}
+		else{
+			start=0;
+			game.setScreen(new Play(game));
+		}
 	}
 
 }

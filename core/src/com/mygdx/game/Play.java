@@ -40,6 +40,7 @@ public class Play implements Screen{
             Gdx.app.log("x>", String.valueOf(Gdx.input.getX()));
             Gdx.app.log("y>", String.valueOf(900-Gdx.input.getY()));
         }
+
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
             if(Gdx.input.isKeyPressed(Input.Keys.A)){
                 tank.move(true);
@@ -50,7 +51,8 @@ public class Play implements Screen{
                 //Gdx.app.log("Move>", "Backward");
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-                tank.fire();
+                game.setScreen(new Fire(game,tank));
+                Gdx.app.log("Fired","missile");
             }
         }
 //        s_tank.draw(game.batch);
