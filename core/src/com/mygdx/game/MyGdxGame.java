@@ -387,7 +387,7 @@ class Trajectory{
 	double angle;
 	double velocity;
 	boolean flipped;
-	int slowfactor=2;
+	int slowfactor=5;
 
 
 	Texture DOT=new Texture("Tracks\\Trackball.png");
@@ -409,8 +409,8 @@ class Trajectory{
 		gap=(int)(power/10);
 	}
 
-	double derivative(int x){
-		return Math.toDegrees(((float)Math.tan(Math.toRadians(angle)) -10*x/(velocity*velocity*(float)(Math.pow(Math.cos(Math.toRadians(angle)),2)))));
+	double derivative(double x){
+		return Math.toDegrees(Math.atan(((float)Math.tan(Math.toRadians(angle)) -10*x/(velocity*velocity*(float)(Math.pow(Math.cos(Math.toRadians(angle)),2))))));
 	}
 
 	void draw(){
@@ -444,12 +444,13 @@ class Trajectory{
 	}
 
 	void follow(Sprite missile){
-		int x=(int)(x0+velocity*Math.cos(Math.toRadians(angle))*start/slowfactor-33);
-		int y=(int)(y0+velocity*Math.sin(Math.toRadians(angle))*start/slowfactor-5*start*start/(slowfactor*slowfactor)-33);
+		int x=(int)(x0+velocity*Math.cos(Math.toRadians(angle))*start/slowfactor-30);
+		int y=(int)(y0+velocity*Math.sin(Math.toRadians(angle))*start/slowfactor-5*start*start/(slowfactor*slowfactor)-6);
 		//Gdx.app.log("Angle",String.valueOf(derivative(start)));
 
 		if((x<1600 && x>0) && (y<900 && y>=0)){
-			missile.setRotation((int)derivative(start));
+			missile.setOrigin(missile.getWidth()/2, missile.getHeight()/2);
+			missile.setRotation((int)derivative(velocity*Math.cos(Math.toRadians(angle))*start/slowfactor));
 			missile.setPosition(x, y);
 			missile.draw(game.batch);
 			start+=1;
