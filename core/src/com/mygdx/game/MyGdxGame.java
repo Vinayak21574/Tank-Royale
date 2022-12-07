@@ -10,7 +10,9 @@ import com.badlogic.gdx.physics.bullet.Bullet;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
+
 
 class Element{
 	private int midX,midY;
@@ -249,6 +251,7 @@ class displayTank {
 	}
 }
 
+
 public class MyGdxGame extends Game {
 	SpriteBatch batch;
 	@Override
@@ -272,9 +275,9 @@ class Tank {
 	int x0,y0;
 	int x1,y1;
 	float Cangle;
+	float Gangle=0;
 	boolean flipped=false;
 	double power;
-	boolean fired;
 
 	MyGdxGame game;
 	Trajectory traj;
@@ -308,6 +311,7 @@ class Tank {
 		int y=900-Gdx.input.getY();
 
 		Cangle=(float)Math.toDegrees(Math.atan2(y-y0,x-x0));
+		Cangle+=Gangle;
 
 		if(Cangle<0){
 			Cangle+=360;
@@ -340,6 +344,7 @@ class Tank {
 
 	void draw(){
 		for(Sprite i:collect){
+			i.setRotation(Gangle);
 			i.draw(game.batch);
 		}
 	}
@@ -388,7 +393,6 @@ class Trajectory{
 	double velocity;
 	boolean flipped;
 	int slowfactor=5;
-
 
 	Texture DOT=new Texture("Tracks\\Trackball.png");
 	Sprite dot= new Sprite(DOT,0,0, DOT.getWidth(), DOT.getHeight());
@@ -443,7 +447,7 @@ class Trajectory{
 		start=0;
 	}
 
-	void follow(Sprite missile){
+	void follow(Sprite missile,Screen prev){
 		int x=(int)(x0+velocity*Math.cos(Math.toRadians(angle))*start/slowfactor-30);
 		int y=(int)(y0+velocity*Math.sin(Math.toRadians(angle))*start/slowfactor-5*start*start/(slowfactor*slowfactor)-6);
 		//Gdx.app.log("Angle",String.valueOf(derivative(start)));
@@ -457,7 +461,7 @@ class Trajectory{
 		}
 		else{
 			start=0;
-			game.setScreen(new Play(game));
+			game.setScreen(prev);
 		}
 	}
 
