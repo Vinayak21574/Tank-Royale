@@ -15,6 +15,7 @@ public class Play implements Screen{
 
     Tank tank=new Tank(game);
     Terrain current=new Terrain(game);
+    private Element map=new Element("Screens\\Fields\\Normal\\map.png",800,450);
 
     //private Element tank=new Element("Tanks\\Left\\B.png",300,150);
 
@@ -26,7 +27,7 @@ public class Play implements Screen{
         tank.traj.game=game;
         tank.locate(200,200);
         current.game=game;
-        current.initialise();
+        map.setGame(game);
     }
 
     float angle=0;
@@ -34,7 +35,14 @@ public class Play implements Screen{
     public void render(float delta) {
         ScreenUtils.clear(1,0,0,1);
         game.batch.begin();
+        map.Draw();
             current.Draw();
+            if(Gdx.input.justTouched()) {
+                //current.modify(Gdx.input.getX(),900-Gdx.input.getY(),false);
+                current=new Terrain(game);
+            }
+
+
 
 
 

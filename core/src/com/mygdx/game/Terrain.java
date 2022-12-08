@@ -8,56 +8,94 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.random;
 
 public class Terrain {
-    ArrayList<Integer> list=new ArrayList<>();
+    ArrayList<Integer> scale=new ArrayList<>();
     MyGdxGame game;
     Texture rock=new Texture("Terrain\\Rock.png");
     Sprite Rock=new Sprite(rock);
-//    Sprite Rock = new Sprite(rock);
     int height=0;
 
     public Terrain(MyGdxGame game){
         this.game=game;
+        initialise();
     }
 
     void initialise(){
         Random rnd=new Random();
-        height=400;
+        int range,center=0;
         for(int i=0;i<1600;i++){
-            if(height>=600){
-                height-=1;
-            }
-            else if(height<=100){
-                height+=1;
-            }
-            else{
-                height+=-1+rnd.nextInt(3);
-            }
-            list.add(height);
+            scale.add(100);
+        }
+
+
+
+        for(int i=0;i<10;i++){
+            center=rnd.nextInt(1600);
+            range=rnd.nextInt(100);
+            modify(center, range,true);
         }
     }
 
     void Draw(){
-//        Sprite Body=new Sprite(body,0,0, body.getWidth(), body.getHeight());
         for(int i=0;i<1600;i++){
-            Rock.setPosition(i,0);
-//            Rock.setPosition(i, list.get(i));
-            Rock.setScale(1,list.get(i));
-//            Gdx.app.log(String.valueOf(5*i),String.valueOf(height));
-//            height+=list.get(i);
+            Rock.setScale(1,scale.get(i));
+            Rock.setPosition(i,(int)(scale.get(i)/2));
             Rock.draw(game.batch);
-            if (Gdx.input.justTouched()){
-                mutilation(Gdx.input.getX(), 10);
+        }
+    }
+
+    void modify(int center,int range, boolean UP){
+        boolean raise=false;
+
+        if(!UP){
+            range-=scale.get(center);
+        }
+        else{
+            if (range+scale.get(center)>650){
+                return;
             }
         }
-//        done=true;
-    }
-    void mutilation(int x, int m){
-        float radius = 40;
-        for (int i = x - m; i <= x+m ; i++){
-            list.set(i, (int) (list.get(i)-radius/abs(x-i)));
+        if(range>=0){
+            raise=true;
+        }
+
+        range=abs(range);
+
+        for(int i=1;i<range;i++){
+            height=(int)Math.pow((2 * range*range - i * i), 0.5);
+            if(center-i>0){
+                update(center-i,height,raise);
+            }
+            if(center+i<1600){
+                update(center+i,height,raise);
+            }
+        }
+
+        if(center<1600 && center>0){
+            update(center,(int)(Math.pow(2,0.5)*range),raise);
+        }
+
+        for(int i=0;i<range;i++){
+            if(center-range-i>0){
+                update(center-range-i,range-i,raise);
+            }
+            if(center+range+i<1600){
+                update(center+range+i,range-i,raise);
+            }
         }
     }
+
+    void update(int index,int value,boolean up){
+        int temp=scale.get(index);
+        if(up){
+            scale.set(index, Math.min(value + temp, 650));
+        }
+        else{
+            scale.set(index, Math.max(temp - value, 50));
+        }
+    }
+
 
 }
