@@ -3,9 +3,15 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Vector;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.random;
@@ -15,7 +21,9 @@ public class Terrain {
     MyGdxGame game;
     Texture rock=new Texture("Terrain\\Rock.png");
     Sprite Rock=new Sprite(rock);
-    int height=0;
+    int limit=100;
+
+//    int height=0;
 
     public Terrain(MyGdxGame game){
         this.game=game;
@@ -25,15 +33,14 @@ public class Terrain {
     void initialise(){
         Random rnd=new Random();
         int range,center=0;
+
         for(int i=0;i<1600;i++){
-            scale.add(100);
+            scale.add(limit);
         }
-
-
 
         for(int i=0;i<10;i++){
             center=rnd.nextInt(1600);
-            range=rnd.nextInt(100);
+            range=rnd.nextInt(150);
             modify(center, range,true);
         }
     }
@@ -41,7 +48,7 @@ public class Terrain {
     void Draw(){
         for(int i=0;i<1600;i++){
             Rock.setScale(1,scale.get(i));
-            Rock.setPosition(i,(int)(scale.get(i)/2));
+            Rock.setPosition(i,0);
             Rock.draw(game.batch);
         }
     }
@@ -50,13 +57,14 @@ public class Terrain {
         boolean raise=false;
 
         if(!UP){
-            range-=scale.get(center);
+            range-=(scale.get(center));
         }
         else{
-            if (range+scale.get(center)>650){
+            if ((Math.pow(2,0.5)*(range-scale.get(center))+scale.get(center)>650)){
                 return;
             }
         }
+
         if(range>=0){
             raise=true;
         }
@@ -64,7 +72,7 @@ public class Terrain {
         range=abs(range);
 
         for(int i=1;i<range;i++){
-            height=(int)Math.pow((2 * range*range - i * i), 0.5);
+            int height=(int)Math.pow((2 * range*range - i * i), 0.5);
             if(center-i>0){
                 update(center-i,height,raise);
             }
@@ -96,6 +104,4 @@ public class Terrain {
             scale.set(index, Math.max(temp - value, 50));
         }
     }
-
-
 }

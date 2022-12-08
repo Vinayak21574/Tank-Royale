@@ -38,9 +38,14 @@ public class Play implements Screen{
         map.Draw();
             current.Draw();
             if(Gdx.input.justTouched()) {
-                //current.modify(Gdx.input.getX(),900-Gdx.input.getY(),false);
+                current.modify(Gdx.input.getX(),900-Gdx.input.getY(),false);
+                //current=new Terrain(game);
+            }
+        if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
                 current=new Terrain(game);
             }
+        }
 
 
 
