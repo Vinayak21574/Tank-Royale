@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -38,6 +39,10 @@ public class Home implements Screen {
                 //TODO quit and start font match
                 Gdx.app.exit();
             }
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            game.setScreen(new Temp(game));
         }
 
         game.batch.end();

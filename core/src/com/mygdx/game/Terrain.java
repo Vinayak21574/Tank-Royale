@@ -34,21 +34,28 @@ public class Terrain {
         Random rnd=new Random();
         int range,center=0;
 
-        for(int i=0;i<1600;i++){
+        for(int i=0;i<800;i++){
             scale.add(limit);
         }
 
-        for(int i=0;i<10;i++){
-            center=rnd.nextInt(1600);
-            range=rnd.nextInt(150);
+        for(int i=0;i<12;i++){
+            center=rnd.nextInt(800);
+            range=rnd.nextInt(100);
             modify(center, range,true);
         }
     }
 
+    void reset(){
+        for(int i=0;i<800;i++){
+            scale.set(i,limit);
+        }
+        initialise();
+    }
+
     void Draw(){
-        for(int i=0;i<1600;i++){
+        for(int i=0;i<800;i++){
             Rock.setScale(1,scale.get(i));
-            Rock.setPosition(i,0);
+            Rock.setPosition(2*i,0);
             Rock.draw(game.batch);
         }
     }
@@ -60,7 +67,14 @@ public class Terrain {
             range-=(scale.get(center));
         }
         else{
-            if ((Math.pow(2,0.5)*(range-scale.get(center))+scale.get(center)>650)){
+            int max=0;
+            for(int i=center-range;i<=center+range;i++){
+                if(i<800 && i>=0) {
+                    max = Math.max(max, scale.get(i));
+                }
+            }
+            if ((Math.pow(2,0.5)*(range)+max>650)){
+                modify(center,range/2,true);
                 return;
             }
         }
@@ -76,12 +90,12 @@ public class Terrain {
             if(center-i>0){
                 update(center-i,height,raise);
             }
-            if(center+i<1600){
+            if(center+i<800){
                 update(center+i,height,raise);
             }
         }
 
-        if(center<1600 && center>0){
+        if(center<800 && center>0){
             update(center,(int)(Math.pow(2,0.5)*range),raise);
         }
 
@@ -89,7 +103,7 @@ public class Terrain {
             if(center-range-i>0){
                 update(center-range-i,range-i,raise);
             }
-            if(center+range+i<1600){
+            if(center+range+i<800){
                 update(center+range+i,range-i,raise);
             }
         }
@@ -104,4 +118,17 @@ public class Terrain {
             scale.set(index, Math.max(temp - value, 50));
         }
     }
+
+    Vector2 [] surface(){
+        Vector2[] temp=new Vector2[800];
+
+        for(int i=0;i<800;i++){
+            temp[i]=new Vector2(2*(i-400),scale.get(i));
+        }
+
+        return temp;
+    }
+
+
+
 }

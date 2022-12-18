@@ -43,8 +43,11 @@ public class Play implements Screen{
             }
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-                current=new Terrain(game);
+                current.reset();
             }
+//            if(Gdx.input.isKeyJustPressed(Input.Keys.ALT_LEFT)){
+//                game.setScreen(Temp());
+//            }
         }
 
 
