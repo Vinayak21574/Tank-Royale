@@ -311,7 +311,6 @@ class Tank {
 		int y=900-Gdx.input.getY();
 
 		Cangle=(float)Math.toDegrees(Math.atan2(y-y0,x-x0));
-		Cangle+=Gangle;
 
 		if(Cangle<0){
 			Cangle+=360;
@@ -344,7 +343,12 @@ class Tank {
 
 	void draw(){
 		for(Sprite i:collect){
-			i.setRotation(Gangle);
+			if(i.equals(Cannon)){
+				i.setRotation(Gangle+Cangle);
+			}
+			else {
+				i.setRotation(Gangle);
+			}
 			i.draw(game.batch);
 		}
 	}

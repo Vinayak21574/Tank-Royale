@@ -15,9 +15,9 @@ public class Play implements Screen{
 
     Tank tank=new Tank(game);
     Terrain current=new Terrain(game);
-    private Element map=new Element("Screens\\Fields\\Normal\\map.png",800,450);
+    Element map=new Element("Screens\\Fields\\Normal\\map.png",800,450);
 
-    //private Element tank=new Element("Tanks\\Left\\B.png",300,150);
+    //Element tank=new Element("Tanks\\Left\\B.png",300,150);
 
     //Sprite s_tank=new Sprite(tank.getTxt(),0, 0, tank.getWidth(), tank.getHeight());
 
@@ -25,8 +25,8 @@ public class Play implements Screen{
         this.game=game;
         tank.game=game;
         tank.traj.game=game;
-        tank.locate(200,200);
         current.game=game;
+        tank.locate(200,500);
         map.setGame(game);
     }
 
@@ -36,7 +36,7 @@ public class Play implements Screen{
         ScreenUtils.clear(1,0,0,1);
         game.batch.begin();
         map.Draw();
-            current.Draw();
+        current.Draw();
             if(Gdx.input.justTouched()) {
                 current.modify(Gdx.input.getX(),900-Gdx.input.getY(),false);
                 //current=new Terrain(game);
@@ -54,28 +54,29 @@ public class Play implements Screen{
 
 
 
-//        tank.rotate();
-//        tank.draw();
-//
-//        if(Gdx.input.justTouched()) {
-//            Gdx.app.log("x>", String.valueOf(Gdx.input.getX()));
-//            Gdx.app.log("y>", String.valueOf(900-Gdx.input.getY()));
-//        }
-//
-//        if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
-//            if(Gdx.input.isKeyPressed(Input.Keys.A)){
-//                tank.move(true);
-//                //Gdx.app.log("Move>", "Forward");
-//            }
-//            else if(Gdx.input.isKeyPressed(Input.Keys.D)){
-//                tank.move(false);
-//                //Gdx.app.log("Move>", "Backward");
-//            }
-//            else if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-//                game.setScreen(new Fire(game,tank,this));
-//                Gdx.app.log("Fired","missile");
-//            }
-//        }
+        tank.rotate();
+        tank.draw();
+
+        if(Gdx.input.justTouched()) {
+            Gdx.app.log("x>", String.valueOf(Gdx.input.getX()));
+            Gdx.app.log("y>", String.valueOf(900-Gdx.input.getY()));
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
+            if(Gdx.input.isKeyPressed(Input.Keys.A)){
+                tank.move(true);
+                //Gdx.app.log("Move>", "Forward");
+            }
+            else if(Gdx.input.isKeyPressed(Input.Keys.D)){
+                tank.move(false);
+                //Gdx.app.log("Move>", "Backward");
+            }
+            else if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+                game.setScreen(new Fire(game,tank,this,current));
+
+                Gdx.app.log("Fired","missile");
+            }
+        }
 //        s_tank.draw(game.batch);
 //        pause.Draw();
 

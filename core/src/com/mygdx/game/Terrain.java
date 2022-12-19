@@ -38,11 +38,11 @@ public class Terrain {
             scale.add(limit);
         }
 
-        for(int i=0;i<12;i++){
-            center=rnd.nextInt(800);
-            range=rnd.nextInt(100);
-            modify(center, range,true);
-        }
+//        for(int i=0;i<12;i++){
+//            center=rnd.nextInt(800);
+//            range=rnd.nextInt(100);
+//            modify(center, range,true);
+//        }
     }
 
     void reset(){
@@ -53,11 +53,13 @@ public class Terrain {
     }
 
     void Draw(){
+//        game.batch.begin();
         for(int i=0;i<800;i++){
             Rock.setScale(1,scale.get(i));
             Rock.setPosition(2*i,0);
             Rock.draw(game.batch);
         }
+//        game.batch.end();
     }
 
     void modify(int center,int range, boolean UP){

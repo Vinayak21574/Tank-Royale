@@ -4,13 +4,19 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class Fire  implements Screen {
+
+    Element map=new Element("Screens\\Fields\\Normal\\map.png",800,450);
     Screen prev;
     MyGdxGame game;
     Tank tank;
 
-    public Fire(MyGdxGame game, Tank tank, Screen here) {
+    Terrain current;
+
+    public Fire(MyGdxGame game, Tank tank, Screen here, Terrain current) {
         this.game = game;
         this.tank = tank;
+        this.current=current;
+        map.setGame(game);
         prev=here;
     }
 
@@ -19,6 +25,8 @@ public class Fire  implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(1,0,0,1);
         game.batch.begin();
+        map.Draw();
+        current.Draw();
         tank.draw();
         tank.traj.follow(tank.Bullet,prev);
         game.batch.end();
