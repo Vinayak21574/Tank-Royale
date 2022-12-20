@@ -280,11 +280,15 @@ class Tank {
 	float Gangle=0;
 	boolean flipped=false;
 	double power;
-	int speed=1;
+	int speed=3;
 	Vector2 lFEET=new Vector2();
 	Vector2 rFEET=new Vector2();
 	int left=70,right=17;
 	Terrain ground;
+
+	Texture healthcolour = new Texture("Terrain\\health1.png");
+	float health=0.5f;
+	Healthbar mine;
 
 	MyGdxGame game;
 	Trajectory traj;
@@ -299,31 +303,35 @@ class Tank {
 	Sprite Cannon=new Sprite(cannon,0,0, cannon.getWidth(), cannon.getHeight());
 	Sprite Bullet=new Sprite(bullet,0,0, bullet.getWidth(), bullet.getHeight());
 	ArrayList<Sprite> collect=new ArrayList<>();
+	float fuel=1;
+	float milage=0.01f;
 
-	public Tank(MyGdxGame game,Terrain terrain,int startX,int startY){
+	public Tank(MyGdxGame game,Terrain terrain,int startX,int startY,boolean side){
 		this.game= game;
 		collect.add(Body);collect.add(Cannon);collect.add(Cap);
 		traj=new Trajectory(game);
 		this.ground=terrain;
 		this.x0=startX;
 		this.y0=startY;
+		mine=new Healthbar(game, healthcolour, side);
+		mine.setLength( (health));
+		initialise();
 	}
 	void locate(int gap){
-		lFEET.x=x0+left;
-		rFEET.x=x0+right;
-		y0=ground.scale.get(x0+left);
+		y0 = ground.scale.get(x0);
+
 		x0+=gap;
 
-//		lFEET.x=x0-left;
-//		rFEET.x=x0+right;
-//
-//		lFEET.y=ground.scale.get((int)lFEET.x);
-//		rFEET.y=ground.scale.get((int)rFEET.x);
-//
-//		Gangle=(float)Math.toDegrees(Math.atan2(rFEET.y-lFEET.y,rFEET.x-lFEET.x));
-//		if(Gangle<0){
-//			Gangle+=360;
-//		}
+		lFEET.x=x0-left;
+		rFEET.x=x0+right;
+
+		lFEET.y=ground.scale.get((int)lFEET.x);
+		rFEET.y=ground.scale.get((int)rFEET.x);
+
+		Gangle=(float)Math.toDegrees(Math.atan2(rFEET.y-lFEET.y,rFEET.x-lFEET.x));
+		if(Gangle<0){
+			Gangle+=360;
+		}
 
 		for(Sprite i:collect){
 			i.setPosition(x0-(108),y0);	//lowermost corner
@@ -377,26 +385,63 @@ class Tank {
 
 	}
 
+	void initialise(){
+		fuel=1f;
+		int x=Gdx.input.getX();
+		int y=900-Gdx.input.getY();
+
+		Cangle=(float)Math.toDegrees(Math.atan2(y-y0,x-x0));
+
+		if(Cangle<0){
+			Cangle+=360;
+		}
+
+//		Gdx.app.log(String.valueOf(Cangle), String.valueOf(Gangle));
+
+		if(validAngle()){
+			Cannon.setRotation(Cangle);
+			Cannon.setOrigin(108, 60); //mid pt of 450,250
+
+			if (Cangle>90 && Cangle<270 && !flipped) {
+				flip(true);
+
+			} else if (flipped && !(Cangle>90 && Cangle<270)) {
+				flip(false);
+			}
+
+			locate(0);
+
+		}
+		getTip(Cangle);
+	}
+
 	void draw(){
 		for(Sprite i:collect){
 			i.draw(game.batch);
 		}
+		mine.draw();
 	}
 
 	void move(boolean value){
-		if(value && (x0-left-speed)<=0){
-			return;
+		if(fuel>0) {
+			fuel-=milage;
+			int number = (int) (speed * Math.cos(Math.toRadians(Gangle)));
+
+			if (x0 < 100 || x0 > 1500) {
+				if (x0 < 100 && value) {
+					return;
+				} else if (x0 > 1500 && !value) {
+					return;
+				}
+			}
+
+			if (value) {
+				locate(-number);
+			} else {
+				locate(number);
+			}
+			rotate();
 		}
-		else if(!value && (x0+right+speed)>=1600){
-			return;
-		}
-		if(value){
-			locate(-speed);
-		}
-		else{
-			locate(speed);
-		}
-		rotate();
 	}
 
 	void getTip(double angle){
@@ -416,15 +461,20 @@ class Tank {
 			}
 		}
 		Bullet.setFlip(value,false);
-		if(value){
-			left=-left;
-			right=-right;
-		}
+
+		locate(0);
+		int temp=left;
+		left=right;
+		right=temp;
 		flipped = !flipped;
 	}
 
 	void setPower(int x,int y){
 		power= Math.pow(Math.pow(x-x1,2)+Math.pow(y-y1,2),0.5f);
+	}
+
+	void refuel(){
+		fuel=1;
 	}
 
 }
@@ -512,6 +562,48 @@ class Trajectory{
 			start=0;
 			game.setScreen(prev);
 		}
+	}
+
+}
+
+class Healthbar{
+	Texture border=new Texture("Terrain\\healthborder.png");
+	Sprite Border=new Sprite(border,0,0,border.getWidth(), border.getHeight());
+	MyGdxGame game;
+	Texture health;
+	Sprite Health;
+	boolean side;
+	public Healthbar(MyGdxGame game, Texture health, boolean side){
+		this.game=game;
+		this.health= health;
+		this.Health= new Sprite(health,0,0,health.getWidth(),health.getHeight());
+		this.side = side;
+		this.setPosition();
+	}
+
+	void setLength(float value){
+		Health.setScale(value,1);
+	}
+
+	void setPosition(){
+		int x,y;
+		if (side){
+			x=901;
+			y=821;
+			Health.setFlip(true,false);
+			Border.setFlip(true,false);
+		}
+		else{
+			x= 47;
+			y= 821;
+		}
+		Health.setPosition(x,y);
+		Border.setPosition(x,y);
+	}
+
+	void draw(){
+		Border.draw(game.batch);
+		Health.draw(game.batch);
 	}
 
 }

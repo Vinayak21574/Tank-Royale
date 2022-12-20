@@ -8,16 +8,18 @@ public class Fire  implements Screen {
     Element map=new Element("Screens\\Fields\\Normal\\map.png",800,450);
     Screen prev;
     MyGdxGame game;
-    Tank tank;
+    Tank tank1,tank2;
 
     Terrain current;
 
-    public Fire(MyGdxGame game, Tank tank, Screen here, Terrain current) {
+    public Fire(MyGdxGame game, Tank tankL,Tank tankR, Screen here, Terrain current) {
         this.game = game;
-        this.tank = tank;
+        this.tank1 = tankL;
+        this.tank2 = tankR;
         this.current=current;
         map.setGame(game);
         prev=here;
+        this.tank1.refuel();
     }
 
 
@@ -27,8 +29,9 @@ public class Fire  implements Screen {
         game.batch.begin();
         map.Draw();
         current.Draw();
-        tank.draw();
-        tank.traj.follow(tank.Bullet,prev);
+        tank1.draw();
+        tank2.draw();
+        tank1.traj.follow(tank1.Bullet,prev);
         game.batch.end();
     }
 

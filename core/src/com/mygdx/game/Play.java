@@ -15,16 +15,20 @@ public class Play implements Screen{
 
     Terrain current=new Terrain(game);
     Element map=new Element("Screens\\Fields\\Normal\\map.png",800,450);
-    Tank tank=new Tank(game,current,800,500);
+    Tank tankL,tankR;
+
+    boolean turn=true;
 
     //Element tank=new Element("Tanks\\Left\\B.png",300,150);
 
     //Sprite s_tank=new Sprite(tank.getTxt(),0, 0, tank.getWidth(), tank.getHeight());
 
     public Play(MyGdxGame game){
+        tankL=new Tank(game,current,200,500,false);
+        tankR=new Tank(game,current,1300,500,true);
         this.game=game;
-        tank.game=game;
-        tank.traj.game=game;
+        tankL.traj.game=game;
+        tankR.traj.game=game;
         current.game=game;
         map.setGame(game);
     }
@@ -36,8 +40,14 @@ public class Play implements Screen{
         game.batch.begin();
         map.Draw();
         current.Draw();
-        tank.rotate();
-        tank.draw();
+        if(turn){
+            tankL.rotate();
+        }
+        else{
+            tankR.rotate();
+        }
+        tankL.draw();
+        tankR.draw();
 
         if(Gdx.input.justTouched()) {
             Gdx.app.log("x>", String.valueOf(Gdx.input.getX()));
@@ -46,19 +56,38 @@ public class Play implements Screen{
 
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
             if(Gdx.input.isKeyPressed(Input.Keys.A)){
-                tank.move(true);
+                if(turn){
+                    tankL.move(true);
+                }
+                else{
+                    tankR.move(true);
+                }
                 //Gdx.app.log("Move>", "Forward");
             }
             else if(Gdx.input.isKeyPressed(Input.Keys.D)){
-                tank.move(false);
+                if(turn){
+                    tankL.move(false);
+                }
+                else{
+                    tankR.move(false);
+                }
                 //Gdx.app.log("Move>", "Backward");
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-                game.setScreen(new Fire(game,tank,this,current));
+                if(turn) {
+                    game.setScreen(new Fire(game, tankL,tankR, this, current));
+                }
+                else{
+                    game.setScreen(new Fire(game, tankR,tankL, this, current));
+                }
+
+                turn=!turn;
                 Gdx.app.log("Fired","missile");
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.ALT_RIGHT)){
-                tank.ground.reset();
+                tankL.ground.reset();
+                tankL.initialise();
+                tankR.initialise();
             }
         }
 //        s_tank.draw(game.batch);
