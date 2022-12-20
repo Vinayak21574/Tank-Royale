@@ -280,7 +280,7 @@ class Tank {
 	float Gangle=0;
 	boolean flipped=false;
 	double power;
-	int speed=3;
+	int speed=1;
 	Vector2 lFEET=new Vector2();
 	Vector2 rFEET=new Vector2();
 	int left=70,right=17;
@@ -309,19 +309,21 @@ class Tank {
 		this.y0=startY;
 	}
 	void locate(int gap){
-		x0+=gap;
-		y0=ground.scale.get(x0);
-
-		lFEET.x=x0-left;
+		lFEET.x=x0+left;
 		rFEET.x=x0+right;
+		y0=ground.scale.get(x0+left);
+		x0+=gap;
 
-		lFEET.y=ground.scale.get((int)lFEET.x);
-		rFEET.y=ground.scale.get((int)rFEET.x);
-
-		Gangle=(float)Math.toDegrees(Math.atan2(rFEET.y-lFEET.y,rFEET.x-lFEET.x));
-		if(Gangle<0){
-			Gangle+=360;
-		}
+//		lFEET.x=x0-left;
+//		rFEET.x=x0+right;
+//
+//		lFEET.y=ground.scale.get((int)lFEET.x);
+//		rFEET.y=ground.scale.get((int)rFEET.x);
+//
+//		Gangle=(float)Math.toDegrees(Math.atan2(rFEET.y-lFEET.y,rFEET.x-lFEET.x));
+//		if(Gangle<0){
+//			Gangle+=360;
+//		}
 
 		for(Sprite i:collect){
 			i.setPosition(x0-(108),y0);	//lowermost corner
@@ -343,9 +345,9 @@ class Tank {
 
 		Cangle=(float)Math.toDegrees(Math.atan2(y-y0,x-x0));
 
-//		if(Cangle<0){
-//			Cangle+=360;
-//		}
+		if(Cangle<0){
+			Cangle+=360;
+		}
 
 //		Gdx.app.log(String.valueOf(Cangle), String.valueOf(Gangle));
 
@@ -404,49 +406,7 @@ class Tank {
 
 
 	boolean validAngle(){
-		float value;
-		Gdx.app.log(String.valueOf(Cangle), String.valueOf(Gangle));
-		//return true;
-//		return ((Cangle>Gangle && Cangle-Gangle<=200));
-//		if(Gangle>0) {
-//			if(Cangle>0){
-//				value=180+Cangle-Gangle;
-//				if(value<20){
-//					return true;
-//				}
-//			}
-//			else{
-//				value=Gangle-Cangle;
-//				if(value<20){
-//					return true;
-//				}
-//			}
-//		}
-//		else{
-//			if(Cangle>0){
-//				value=Cangle-Gangle-180;
-//				if(value<20){
-//					return true;
-//				}
-//			}
-//			else{
-//				if(flipped){
-//					value=Gangle-Cangle;
-//					if(value>160){
-//						return true;
-//					}
-//				}
-//				else{
-//					value=Gangle-Cangle;
-//					if(value<20){
-//						return true;
-//					}
-//				}
-//
-//			}
-//		}
-//		return false;
-		return !(Cangle - Gangle > -160) || !(Cangle - Gangle < -20);
+		return true;
 	}
 
 	void flip(boolean value){
@@ -456,6 +416,10 @@ class Tank {
 			}
 		}
 		Bullet.setFlip(value,false);
+		if(value){
+			left=-left;
+			right=-right;
+		}
 		flipped = !flipped;
 	}
 
@@ -490,6 +454,9 @@ class Trajectory{
 		x0=x;
 		y0=y;
 		this.angle=angle;
+		if(angle<0){
+			this.angle+=360;
+		}
 		this.velocity=power/6;
 		gap=(int)(power/10);
 	}
