@@ -13,9 +13,9 @@ import java.lang.Math;
 public class Play implements Screen{
     private MyGdxGame game;
 
-    Tank tank=new Tank(game);
     Terrain current=new Terrain(game);
     Element map=new Element("Screens\\Fields\\Normal\\map.png",800,450);
+    Tank tank=new Tank(game,current,800,500);
 
     //Element tank=new Element("Tanks\\Left\\B.png",300,150);
 
@@ -26,7 +26,6 @@ public class Play implements Screen{
         tank.game=game;
         tank.traj.game=game;
         current.game=game;
-        tank.locate(200,500);
         map.setGame(game);
     }
 
@@ -37,23 +36,6 @@ public class Play implements Screen{
         game.batch.begin();
         map.Draw();
         current.Draw();
-            if(Gdx.input.justTouched()) {
-                current.modify(Gdx.input.getX(),900-Gdx.input.getY(),false);
-                //current=new Terrain(game);
-            }
-        if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
-            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-                current.reset();
-            }
-//            if(Gdx.input.isKeyJustPressed(Input.Keys.ALT_LEFT)){
-//                game.setScreen(Temp());
-//            }
-        }
-
-
-
-
-
         tank.rotate();
         tank.draw();
 
@@ -73,8 +55,10 @@ public class Play implements Screen{
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
                 game.setScreen(new Fire(game,tank,this,current));
-
                 Gdx.app.log("Fired","missile");
+            }
+            else if(Gdx.input.isKeyJustPressed(Input.Keys.ALT_RIGHT)){
+                tank.ground.reset();
             }
         }
 //        s_tank.draw(game.batch);

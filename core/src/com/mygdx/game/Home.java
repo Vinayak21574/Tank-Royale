@@ -42,7 +42,7 @@ public class Home implements Screen {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            game.setScreen(new Temp(game));
+            game.setScreen(new Play(game));
         }
 
         game.batch.end();

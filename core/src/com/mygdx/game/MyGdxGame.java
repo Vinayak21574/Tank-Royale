@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.bullet.Bullet;
 
 
@@ -272,12 +273,18 @@ public class MyGdxGame extends Game {
 }
 
 class Tank {
+	//x0,y0->center midC
 	int x0,y0;
 	int x1,y1;
 	float Cangle;
 	float Gangle=0;
 	boolean flipped=false;
 	double power;
+	int speed=3;
+	Vector2 lFEET=new Vector2();
+	Vector2 rFEET=new Vector2();
+	int left=70,right=17;
+	Terrain ground;
 
 	MyGdxGame game;
 	Trajectory traj;
@@ -293,17 +300,41 @@ class Tank {
 	Sprite Bullet=new Sprite(bullet,0,0, bullet.getWidth(), bullet.getHeight());
 	ArrayList<Sprite> collect=new ArrayList<>();
 
-	public Tank(MyGdxGame game){
+	public Tank(MyGdxGame game,Terrain terrain,int startX,int startY){
 		this.game= game;
 		collect.add(Body);collect.add(Cannon);collect.add(Cap);
 		traj=new Trajectory(game);
+		this.ground=terrain;
+		this.x0=startX;
+		this.y0=startY;
 	}
-	void locate(int x,int y){
-		for(Sprite i:collect){
-			i.setPosition(x-225,y-125);
+	void locate(int gap){
+		x0+=gap;
+		y0=ground.scale.get(x0);
+
+		lFEET.x=x0-left;
+		rFEET.x=x0+right;
+
+		lFEET.y=ground.scale.get((int)lFEET.x);
+		rFEET.y=ground.scale.get((int)rFEET.x);
+
+		Gangle=(float)Math.toDegrees(Math.atan2(rFEET.y-lFEET.y,rFEET.x-lFEET.x));
+		if(Gangle<0){
+			Gangle+=360;
 		}
-		x0=x;
-		y0=y;
+
+		for(Sprite i:collect){
+			i.setPosition(x0-(108),y0);	//lowermost corner
+			if(i.equals(Cannon)){
+				if(validAngle()) {
+					i.setRotation(Cangle);
+				}
+			}
+			else {
+				i.setRotation(Gangle);
+			}
+		}
+		y0+=60;
 	}
 
 	void rotate(){
@@ -312,13 +343,15 @@ class Tank {
 
 		Cangle=(float)Math.toDegrees(Math.atan2(y-y0,x-x0));
 
-		if(Cangle<0){
-			Cangle+=360;
-		}
+//		if(Cangle<0){
+//			Cangle+=360;
+//		}
+
+//		Gdx.app.log(String.valueOf(Cangle), String.valueOf(Gangle));
 
 		if(validAngle()){
 			Cannon.setRotation(Cangle);
-			Cannon.setOrigin(225, 125);
+			Cannon.setOrigin(108, 60); //mid pt of 450,250
 
 			if (Cangle>90 && Cangle<270 && !flipped) {
 				flip(true);
@@ -327,50 +360,93 @@ class Tank {
 				flip(false);
 			}
 
-			locate(x0, y0);
+			locate(0);
 
 		}
 
 		getTip(Cangle);
+
 		traj.flipped=flipped;
 		setPower(x,y);
 		if(validAngle()){
 			traj.setStart(x1,y1,Cangle,power);
+			traj.draw(validAngle());
 		}
-		traj.draw();
 
 	}
 
 	void draw(){
 		for(Sprite i:collect){
-			if(i.equals(Cannon)){
-				i.setRotation(Gangle+Cangle);
-			}
-			else {
-				i.setRotation(Gangle);
-			}
 			i.draw(game.batch);
 		}
 	}
 
 	void move(boolean value){
+		if(value && (x0-left-speed)<=0){
+			return;
+		}
+		else if(!value && (x0+right+speed)>=1600){
+			return;
+		}
 		if(value){
-			locate(x0-6,y0);
+			locate(-speed);
 		}
 		else{
-			locate(x0+6,y0);
+			locate(speed);
 		}
 		rotate();
 	}
 
 	void getTip(double angle){
-		x1=x0+(int)(Math.cos(Math.toRadians(angle))*(150) + Math.sin(Math.toRadians(angle))*0);
-		y1=y0+(int)(Math.sin(Math.toRadians(angle))*(150) + Math.cos(Math.toRadians(angle))*0);
+		x1=x0+(int)(Math.cos(Math.toRadians(angle))*(80) + Math.sin(Math.toRadians(angle))*0);//length of cannon
+		y1=y0+(int)(Math.sin(Math.toRadians(angle))*(80) + Math.cos(Math.toRadians(angle))*0);
 	}
 
 
 	boolean validAngle(){
-		return !(Cangle<=340 && Cangle>=200);
+		float value;
+		Gdx.app.log(String.valueOf(Cangle), String.valueOf(Gangle));
+		//return true;
+//		return ((Cangle>Gangle && Cangle-Gangle<=200));
+//		if(Gangle>0) {
+//			if(Cangle>0){
+//				value=180+Cangle-Gangle;
+//				if(value<20){
+//					return true;
+//				}
+//			}
+//			else{
+//				value=Gangle-Cangle;
+//				if(value<20){
+//					return true;
+//				}
+//			}
+//		}
+//		else{
+//			if(Cangle>0){
+//				value=Cangle-Gangle-180;
+//				if(value<20){
+//					return true;
+//				}
+//			}
+//			else{
+//				if(flipped){
+//					value=Gangle-Cangle;
+//					if(value>160){
+//						return true;
+//					}
+//				}
+//				else{
+//					value=Gangle-Cangle;
+//					if(value<20){
+//						return true;
+//					}
+//				}
+//
+//			}
+//		}
+//		return false;
+		return !(Cangle - Gangle > -160) || !(Cangle - Gangle < -20);
 	}
 
 	void flip(boolean value){
@@ -379,6 +455,7 @@ class Tank {
 				i.setFlip(value, false);
 			}
 		}
+		Bullet.setFlip(value,false);
 		flipped = !flipped;
 	}
 
@@ -421,34 +498,35 @@ class Trajectory{
 		return Math.toDegrees(Math.atan(((float)Math.tan(Math.toRadians(angle)) -10*x/(velocity*velocity*(float)(Math.pow(Math.cos(Math.toRadians(angle)),2))))));
 	}
 
-	void draw(){
-		for(int i=0;i<10;i++){
-			if(angle<=87 || angle>=93) {
-				dot.setPosition(x0 + start - 10, y0 + getY(start) - 10);
-			}
-			else{
-				dot.setPosition(x0 - 10, y0 +gap*8- 10);
-				dot.draw(game.batch);
-				dot.setPosition(x0 - 10, y0 +gap*4- 10);
-				dot.draw(game.batch);
-				dot.setPosition(x0 - 10, y0 - 10);
-				dot.draw(game.batch);
-				break;
-			}
+	void draw(boolean valid) {
+		if (valid) {
 
-			if(flipped){
-				start-=gap;
-			}
-			else{
-				start+=gap;
-			}
+			for (int i = 0; i < 10; i++) {
+				if (angle <= 87 || angle >= 93) {
+					dot.setPosition(x0 + start - 10, y0 + getY(start) - 10);
+				} else {
+					dot.setPosition(x0 - 10, y0 + gap * 8 - 10);
+					dot.draw(game.batch);
+					dot.setPosition(x0 - 10, y0 + gap * 4 - 10);
+					dot.draw(game.batch);
+					dot.setPosition(x0 - 10, y0 - 10);
+					dot.draw(game.batch);
+					break;
+				}
 
-			if(y0 + getY(start) - 10<0){
-				break;
+				if (flipped) {
+					start -= gap;
+				} else {
+					start += gap;
+				}
+
+				if (y0 + getY(start) - 10 < 0) {
+					break;
+				}
+				dot.draw(game.batch);
 			}
-			dot.draw(game.batch);
+			start = 0;
 		}
-		start=0;
 	}
 
 	void follow(Sprite missile,Screen prev){
@@ -456,7 +534,7 @@ class Trajectory{
 		int y=(int)(y0+velocity*Math.sin(Math.toRadians(angle))*start/slowfactor-5*start*start/(slowfactor*slowfactor)-6);
 		//Gdx.app.log("Angle",String.valueOf(derivative(start)));
 
-		if((x<1600 && x>0) && (y<900 && y>=0)){
+		if((x<1600 && x>0) && (y>=0)){
 			missile.setOrigin(missile.getWidth()/2, missile.getHeight()/2);
 			missile.setRotation((int)derivative(velocity*Math.cos(Math.toRadians(angle))*start/slowfactor));
 			missile.setPosition(x, y);
