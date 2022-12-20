@@ -15,6 +15,7 @@ public class Play implements Screen{
 
     Terrain current=new Terrain(game);
     Element map=new Element("Screens\\Fields\\Normal\\map.png",800,450);
+    Element pause=new Element("Buttons\\Bright\\Pause.png",800,800);
     Tank tankL,tankR;
 
     boolean turn=true;
@@ -30,6 +31,7 @@ public class Play implements Screen{
         tankL.traj.game=game;
         tankR.traj.game=game;
         current.game=game;
+        pause.setGame(game);
         map.setGame(game);
     }
 
@@ -52,6 +54,9 @@ public class Play implements Screen{
         if(Gdx.input.justTouched()) {
             Gdx.app.log("x>", String.valueOf(Gdx.input.getX()));
             Gdx.app.log("y>", String.valueOf(900-Gdx.input.getY()));
+            if(pause.detect()){
+                game.setScreen(new Pause(game));
+            }
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
@@ -91,14 +96,14 @@ public class Play implements Screen{
             }
         }
 //        s_tank.draw(game.batch);
-//        pause.Draw();
+        pause.Draw();
 
         game.batch.end();
     }
 
     @Override
     public void dispose() {
-        //pause.Erase();
+        pause.Erase();
     }
 
     @Override

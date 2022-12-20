@@ -309,7 +309,8 @@ class Tank {
 	public Tank(MyGdxGame game,Terrain terrain,int startX,int startY,boolean side){
 		this.game= game;
 		collect.add(Body);collect.add(Cannon);collect.add(Cap);
-		traj=new Trajectory(game);
+		traj=new Trajectory(game,ground);
+		traj.ground=terrain;
 		this.ground=terrain;
 		this.x0=startX;
 		this.y0=startY;
@@ -481,6 +482,7 @@ class Tank {
 
 class Trajectory{
 	//g==10
+	Terrain ground;
 	int x0,y0;
 	int start=0;
 	int gap;
@@ -493,8 +495,9 @@ class Trajectory{
 	Sprite dot= new Sprite(DOT,0,0, DOT.getWidth(), DOT.getHeight());
 	MyGdxGame game;
 
-	public Trajectory(MyGdxGame game) {
+	public Trajectory(MyGdxGame game,Terrain ground) {
 		this.game = game;
+		this.ground=ground;
 	}
 
 	int getY(int x){
@@ -549,11 +552,12 @@ class Trajectory{
 	void follow(Sprite missile,Screen prev){
 		int x=(int)(x0+velocity*Math.cos(Math.toRadians(angle))*start/slowfactor-30);
 		int y=(int)(y0+velocity*Math.sin(Math.toRadians(angle))*start/slowfactor-5*start*start/(slowfactor*slowfactor)-6);
+		int theta=(int)derivative(velocity*Math.cos(Math.toRadians(angle))*start/slowfactor);
 		//Gdx.app.log("Angle",String.valueOf(derivative(start)));
-
-		if((x<1600 && x>0) && (y>=0)){
+		boolean collided=checkCollision(missile,x,y,theta);
+		if((x<1600 && x>0) && (y>=0) && !collided){
 			missile.setOrigin(missile.getWidth()/2, missile.getHeight()/2);
-			missile.setRotation((int)derivative(velocity*Math.cos(Math.toRadians(angle))*start/slowfactor));
+			missile.setRotation(theta);
 			missile.setPosition(x, y);
 			missile.draw(game.batch);
 			start+=1;
@@ -564,6 +568,14 @@ class Trajectory{
 		}
 	}
 
+	boolean checkCollision(Sprite missile,int startX,int startY,int angle){
+		for(int i=0;i<missile.getWidth()*Math.cos(Math.toRadians((angle)));i++){
+			if(ground.scale.get(startX+i)<=startY+startX*Math.tan(Math.toRadians((angle)))){
+				return true;
+			}
+		}
+		return false;
+	}
 }
 
 class Healthbar{
@@ -592,10 +604,12 @@ class Healthbar{
 			y=821;
 			Health.setFlip(true,false);
 			Border.setFlip(true,false);
+			Health.setOrigin(border.getWidth(), 0);
 		}
 		else{
 			x= 47;
 			y= 821;
+			Health.setOrigin(0, 0);
 		}
 		Health.setPosition(x,y);
 		Border.setPosition(x,y);
