@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -12,6 +14,7 @@ public class Fire  implements Screen {
     Tank tank1,tank2;
 
     Terrain current;
+    Sound sound = Gdx.audio.newSound(Gdx.files.internal("Sounds\\rocket.mp3"));
 
     public Fire(MyGdxGame game, Tank tankL,Tank tankR, Screen here, Terrain current) {
         this.game = game;
@@ -21,6 +24,7 @@ public class Fire  implements Screen {
         map.setGame(game);
         prev=here;
         this.tank1.refuel();
+        long id = sound.play(1.0f);
     }
 
 
@@ -32,7 +36,7 @@ public class Fire  implements Screen {
         current.Draw();
         tank1.draw();
         tank2.draw();
-        tank1.traj.follow(tank1.Bullet,tank2,prev);
+        tank1.getTraj().follow(tank1.getBullet(),tank2,prev);
         tank1.initialise();
         game.batch.end();
     }

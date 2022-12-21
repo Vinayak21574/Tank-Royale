@@ -38,19 +38,21 @@ public class Pause implements Screen{
         game.batch.end();
 
         if(Gdx.input.justTouched()) {
-            if(quit.detect()){
+            if (quit.detect()) {
                 game.setScreen(new Menu(game));
-            }
-            else if(save.detect()){
+            } else if (save.detect()) {
                 prev.ls.save();
-            }
-            else if(sound.detect()){
+                game.setScreen(new Menu(game));
+            } else if (sound.detect()) {
                 sound.invert();
-            }
-            else if(music.detect()){
+            } else if (music.detect()) {
                 music.invert();
-            }
-            else if(resume.detect()){
+                if (music.isInverted()) {
+                    prev.music.stop(prev.id);
+                } else {
+                    prev.id = prev.music.play(1.0f);
+                }
+            } else if (resume.detect()) {
                 game.setScreen(prev);
             }
         }

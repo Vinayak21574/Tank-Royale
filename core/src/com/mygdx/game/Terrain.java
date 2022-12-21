@@ -10,14 +10,30 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Vector;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.random;
 
+class Custom_Iterator {
+    void traverse(ArrayList<Integer> scale,int limit,int range) {
+        Iterator iter= scale.listIterator();
+        range--;
+        scale.add(limit);
+        while(iter.hasNext()) {
+            if(range<0){
+                break;
+            }
+            range--;
+            scale.add(limit);
+        }
+    }
+}
+
 public class Terrain {
-    ArrayList<Integer> scale=new ArrayList<>();
+    ArrayList<Integer> scale=new ArrayList<>(1600);
     MyGdxGame game;
     Texture rock=new Texture("Terrain\\Rock.png");
     Sprite Rock=new Sprite(rock);
@@ -34,9 +50,13 @@ public class Terrain {
         Random rnd=new Random();
         int range,center=0;
 
-        for(int i=0;i<1600;i++){
-            scale.add(limit);
-        }
+        Custom_Iterator here=new Custom_Iterator();
+
+//        for(int i=0;i<1600;i++){
+//            scale.add(0);
+//        }
+
+        here.traverse(scale,limit,1600);
 
         for(int i=0;i<12;i++){
             center=rnd.nextInt(1600);

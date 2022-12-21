@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,6 +22,12 @@ public class Play implements Screen{
     Loadstate ls = new Loadstate(this);
     boolean turn=true;
 
+    Sound music = Gdx.audio.newSound(Gdx.files.internal("Sounds\\tank-battle.mp3"));
+
+    long id = music.play(1.0f);
+
+
+
     //Element tank=new Element("Tanks\\Left\\B.png",300,150);
 
     //Sprite s_tank=new Sprite(tank.getTxt(),0, 0, tank.getWidth(), tank.getHeight());
@@ -29,8 +36,8 @@ public class Play implements Screen{
         tankL=new Tank(game,current,200,500,false,Duo.getCurrent1().getCount());
         tankR=new Tank(game,current,1300,500,true,Duo.getCurrent2().getCount());
         this.game=game;
-        tankL.traj.game=game;
-        tankR.traj.game=game;
+        tankL.getTraj().setGame(game);
+        tankR.getTraj().setGame(game);
         current.game=game;
         pause.setGame(game);
         map.setGame(game);
@@ -45,19 +52,17 @@ public class Play implements Screen{
         map.Draw();
         current.Draw();
 
-        if(!(tankL.health>0 && tankR.health>0)){
-            pause.Kick();
+        if(!(tankL.getHealth() >0 && tankR.getHealth() >0)){
+//            pause.Kick();
             gameover.Draw();
             if(gameover.getStartY()>=350){
                 gameover.setStartY(gameover.getStartY()-1);
             }
             else{
                 game.setScreen(new Menu(game));
-
             }
         }
         else {
-
             if(turn){
                 tankL.rotate();
             }
@@ -100,7 +105,7 @@ public class Play implements Screen{
                     turn = !turn;
                     Gdx.app.log("Fired", "missile");
                 } else if (Gdx.input.isKeyJustPressed(Input.Keys.ALT_RIGHT)) {
-                    tankL.ground.reset();
+                    tankL.getGround().reset();
                     tankL.initialise();
                     tankR.initialise();
                 }

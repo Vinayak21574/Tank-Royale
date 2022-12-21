@@ -15,7 +15,23 @@ import java.util.HashMap;
 import java.util.Objects;
 
 
-class Element{
+interface _tank_ {
+	void rotate();
+
+	void refuel();
+
+	void move(boolean value);
+
+}
+
+interface _element_{
+	public void Draw();
+
+	public boolean detect();
+
+}
+
+class Element implements _element_{
 	private int midX,midY;
 	private int startX,startY;
 	private int height,width;
@@ -151,9 +167,9 @@ class Element{
 
 	public void Overwrite(Texture custom){
 		this.txt=custom;
-//		game.batch.begin();
+		game.batch.begin();
 		game.batch.draw(this.txt,this.startX,this.startY);
-//		game.batch.end();
+		game.batch.end();
 	}
 
 	public void Kick(){
@@ -168,6 +184,7 @@ class Element{
 		Overwrite(temp);
 	}
 
+	@Override
 	public boolean detect(){
 		int x=Gdx.input.getX();
 		int y=Gdx.input.getY();
@@ -255,7 +272,6 @@ class displayTank {
 	}
 }
 
-
 public class MyGdxGame extends Game {
 	SpriteBatch batch;
 
@@ -283,50 +299,307 @@ public class MyGdxGame extends Game {
 	}
 }
 
-class Tank {
+class Tank implements _tank_{
 	//x0,y0->center midC
-	int x0,y0;
-	int x1,y1;
-	float Cangle;
-	float Gangle=0;
-	boolean flipped=false;
-	double power;
-	Healthbar mine;
-	MyGdxGame game;
-	Trajectory traj;
-	Vector2 lFEET=new Vector2();
-	Vector2 rFEET=new Vector2();
-	Terrain ground;
-	Texture healthcolour = new Texture("Terrain\\health1.png");
+	private int x0,y0;
+	private int x1,y1;
+	private float Cangle;
+	private float Gangle=0;
+	private boolean flipped=false;
 
-	Texture body;
-	Texture cap;
-	Texture cannon;
-	Texture bullet;
+	public int getX0() {
+		return x0;
+	}
 
-	Sprite Body;
-	Sprite Cap;
-	Sprite Cannon;
-	Sprite Bullet;
-	ArrayList<Sprite> collect=new ArrayList<>();
+	public void setX0(int x0) {
+		this.x0 = x0;
+	}
 
-	int speed;
-	int Length;
-	int clearance;
-	int left;
-	int right;
-	Vector2 center;
-	int criticalRadius;
-	float health;
-	float fuel;
-	float milage;
+	public int getY0() {
+		return y0;
+	}
+
+	public void setY0(int y0) {
+		this.y0 = y0;
+	}
+
+	public int getX1() {
+		return x1;
+	}
+
+	public void setX1(int x1) {
+		this.x1 = x1;
+	}
+
+	public int getY1() {
+		return y1;
+	}
+
+	public void setY1(int y1) {
+		this.y1 = y1;
+	}
+
+	public float getCangle() {
+		return Cangle;
+	}
+
+	public void setCangle(float cangle) {
+		Cangle = cangle;
+	}
+
+	public float getGangle() {
+		return Gangle;
+	}
+
+	public void setGangle(float gangle) {
+		Gangle = gangle;
+	}
+
+	public boolean isFlipped() {
+		return flipped;
+	}
+
+	public void setFlipped(boolean flipped) {
+		this.flipped = flipped;
+	}
+
+	public double getPower() {
+		return power;
+	}
+
+	public void setPower(double power) {
+		this.power = power;
+	}
+
+	public Healthbar getMine() {
+		return mine;
+	}
+
+	public void setMine(Healthbar mine) {
+		this.mine = mine;
+	}
+
+	public MyGdxGame getGame() {
+		return game;
+	}
+
+	public void setGame(MyGdxGame game) {
+		this.game = game;
+	}
+
+	public Trajectory getTraj() {
+		return traj;
+	}
+
+	public void setTraj(Trajectory traj) {
+		this.traj = traj;
+	}
+
+	public Vector2 getlFEET() {
+		return lFEET;
+	}
+
+	public void setlFEET(Vector2 lFEET) {
+		this.lFEET = lFEET;
+	}
+
+	public Vector2 getrFEET() {
+		return rFEET;
+	}
+
+	public void setrFEET(Vector2 rFEET) {
+		this.rFEET = rFEET;
+	}
+
+	public Terrain getGround() {
+		return ground;
+	}
+
+	public void setGround(Terrain ground) {
+		this.ground = ground;
+	}
+
+	public Texture getHealthcolour() {
+		return healthcolour;
+	}
+
+	public void setHealthcolour(Texture healthcolour) {
+		this.healthcolour = healthcolour;
+	}
+
+	public Texture getBody() {
+		return body;
+	}
+
+	public void setBody(Sprite body) {
+		Body = body;
+	}
+
+	public void setBody(Texture body) {
+		this.body = body;
+	}
+
+	public Texture getCap() {
+		return cap;
+	}
+
+	public void setCap(Sprite cap) {
+		Cap = cap;
+	}
+
+	public void setCap(Texture cap) {
+		this.cap = cap;
+	}
+
+	public Texture getCannon() {
+		return cannon;
+	}
+
+	public void setCannon(Sprite cannon) {
+		Cannon = cannon;
+	}
+
+	public void setCannon(Texture cannon) {
+		this.cannon = cannon;
+	}
+
+	public Sprite getBullet() {
+		return Bullet;
+	}
+
+	public void setBullet(Sprite bullet) {
+		Bullet = bullet;
+	}
+
+	public ArrayList<Sprite> getCollect() {
+		return collect;
+	}
+
+	public void setCollect(ArrayList<Sprite> collect) {
+		this.collect = collect;
+	}
+
+	public int getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
+
+	public int getLength() {
+		return Length;
+	}
+
+	public void setLength(int length) {
+		Length = length;
+	}
+
+	public int getClearance() {
+		return clearance;
+	}
+
+	public void setClearance(int clearance) {
+		this.clearance = clearance;
+	}
+
+	public int getLeft() {
+		return left;
+	}
+
+	public void setLeft(int left) {
+		this.left = left;
+	}
+
+	public int getRight() {
+		return right;
+	}
+
+	public void setRight(int right) {
+		this.right = right;
+	}
+
+	public Vector2 getCenter() {
+		return center;
+	}
+
+	public void setCenter(Vector2 center) {
+		this.center = center;
+	}
+
+	public int getCriticalRadius() {
+		return criticalRadius;
+	}
+
+	public void setCriticalRadius(int criticalRadius) {
+		this.criticalRadius = criticalRadius;
+	}
+
+	public float getHealth() {
+		return health;
+	}
+
+	public void setHealth(float health) {
+		this.health = health;
+	}
+
+	public float getFuel() {
+		return fuel;
+	}
+
+	public void setFuel(float fuel) {
+		this.fuel = fuel;
+	}
+
+	public float getMilage() {
+		return milage;
+	}
+
+	public void setMilage(float milage) {
+		this.milage = milage;
+	}
+
+	public void setBullet(Texture bullet) {
+		this.bullet = bullet;
+	}
+
+	private double power;
+	private Healthbar mine;
+	private MyGdxGame game;
+	private Trajectory traj;
+	private Vector2 lFEET=new Vector2();
+	private Vector2 rFEET=new Vector2();
+	private Terrain ground;
+	private Texture healthcolour = new Texture("Terrain\\health1.png");
+
+	private Texture body;
+	private Texture cap;
+	private Texture cannon;
+	private Texture bullet;
+
+	private Sprite Body;
+	private Sprite Cap;
+	private Sprite Cannon;
+	private Sprite Bullet;
+	private ArrayList<Sprite> collect=new ArrayList<>();
+
+	private int speed;
+	private int Length;
+	private int clearance;
+	private int left;
+	private int right;
+	private Vector2 center;
+	private int criticalRadius;
+	private float health;
+	private float fuel;
+	private float milage;
 
 	public Tank(MyGdxGame game,Terrain terrain,int startX,int startY,boolean side,int choice){
 		preprocessing(choice);
 		this.game= game;
 		collect.add(Body);collect.add(Cannon);collect.add(Cap);
 		traj=new Trajectory(game,ground);
-		traj.ground=terrain;
+		traj.setGround(terrain);
 		this.ground=terrain;
 		this.x0=startX;
 		this.y0=startY;
@@ -366,7 +639,7 @@ class Tank {
 			Cannon=new Sprite(cannon,0,0, cannon.getWidth(), cannon.getHeight());
 			Bullet=new Sprite(bullet,0,0, bullet.getWidth(), bullet.getHeight());
 
-			speed=3;
+			speed=5;
 			Length=120;
 			clearance=15;
 			left=20;
@@ -375,7 +648,7 @@ class Tank {
 			criticalRadius=90;
 			health=1f;
 			fuel=1;
-			milage=0.01f;
+			milage=0.015f;
 		}
 		else{
 			body=new Texture("Tanks\\C\\Body.png");
@@ -396,7 +669,7 @@ class Tank {
 			criticalRadius=120;
 			health=1f;
 			fuel=1;
-			milage=0;
+			milage=0.02f;
 		}
 	}
 	void locate(int gap){
@@ -429,7 +702,7 @@ class Tank {
 		y0+=60;
 	}
 
-	void rotate(){
+	public void rotate(){
 		int x=Gdx.input.getX();
 		int y=900-Gdx.input.getY();
 
@@ -458,7 +731,7 @@ class Tank {
 
 		getTip(Cangle);
 
-		traj.flipped=flipped;
+		traj.setFlipped(flipped);
 		setPower(x,y);
 		if(validAngle()){
 			traj.setStart(x1,y1,Cangle,power);
@@ -503,8 +776,8 @@ class Tank {
 		}
 		mine.draw();
 	}
-
-	void move(boolean value){
+	@Override
+	public void move(boolean value){
 		if(fuel>0) {
 			fuel-=milage;
 			int number = (int) (speed * Math.cos(Math.toRadians(Gangle)));
@@ -555,7 +828,8 @@ class Tank {
 		power= Math.pow(Math.pow(x-x1,2)+Math.pow(y-y1,2),0.5f);
 	}
 
-	void refuel(){
+	@Override
+	public void refuel(){
 		fuel=1;
 	}
 
@@ -579,21 +853,132 @@ class Tank {
 
 class Trajectory{
 	//g==10
-	Terrain ground;
-	int x0,y0;
-	int start=0;
-	int gap;
-	double angle;
-	double velocity;
-	double damage;
-	boolean flipped;
-	int slowfactor=5;
-	int rangefactor=4;
+	private Terrain ground;
 
-	Texture DOT=new Texture("Tracks\\Trackball.png");
-	Sprite dot= new Sprite(DOT,0,0, DOT.getWidth(), DOT.getHeight());
-	MyGdxGame game;
+	public Terrain getGround() {
+		return ground;
+	}
 
+	public void setGround(Terrain ground) {
+		this.ground = ground;
+	}
+
+	public int getX0() {
+		return x0;
+	}
+
+	public void setX0(int x0) {
+		this.x0 = x0;
+	}
+
+	public int getY0() {
+		return y0;
+	}
+
+	public void setY0(int y0) {
+		this.y0 = y0;
+	}
+
+	public int getStart() {
+		return start;
+	}
+
+	public void setStart(int start) {
+		this.start = start;
+	}
+
+	public int getGap() {
+		return gap;
+	}
+
+	public void setGap(int gap) {
+		this.gap = gap;
+	}
+
+	public double getAngle() {
+		return angle;
+	}
+
+	public void setAngle(double angle) {
+		this.angle = angle;
+	}
+
+	public double getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(double velocity) {
+		this.velocity = velocity;
+	}
+
+	public double getDamage() {
+		return damage;
+	}
+
+	public void setDamage(double damage) {
+		this.damage = damage;
+	}
+
+	public boolean isFlipped() {
+		return flipped;
+	}
+
+	public void setFlipped(boolean flipped) {
+		this.flipped = flipped;
+	}
+
+	public int getSlowfactor() {
+		return slowfactor;
+	}
+
+	public void setSlowfactor(int slowfactor) {
+		this.slowfactor = slowfactor;
+	}
+
+	public int getRangefactor() {
+		return rangefactor;
+	}
+
+	public void setRangefactor(int rangefactor) {
+		this.rangefactor = rangefactor;
+	}
+
+	public Texture getDOT() {
+		return DOT;
+	}
+
+	public void setDOT(Texture DOT) {
+		this.DOT = DOT;
+	}
+
+	public Sprite getDot() {
+		return dot;
+	}
+
+	public void setDot(Sprite dot) {
+		this.dot = dot;
+	}
+
+	public MyGdxGame getGame() {
+		return game;
+	}
+
+	public void setGame(MyGdxGame game) {
+		this.game = game;
+	}
+
+	private int x0,y0;
+	private int start=0;
+	private int gap;
+	private double angle;
+	private double velocity;
+	private double damage=0.1f;
+	private boolean flipped;
+	private int slowfactor=4;
+	private int rangefactor=5;
+	private Texture DOT=new Texture("Tracks\\Trackball.png");
+	private Sprite dot= new Sprite(DOT,0,0, DOT.getWidth(), DOT.getHeight());
+	private MyGdxGame game;
 	public Trajectory(MyGdxGame game,Terrain ground) {
 		this.game = game;
 		this.ground=ground;
@@ -610,7 +995,7 @@ class Trajectory{
 			this.angle+=360;
 		}
 		this.velocity=power/rangefactor;
-		gap=(int)(power/6);
+		gap=(int)(power/8);
 		if(gap>100){
 			gap=100;
 		}
@@ -623,7 +1008,7 @@ class Trajectory{
 	void draw(boolean valid) {
 		if (valid) {
 
-			for (int i = 0; i < 6; i++) {
+			for (int i = 0; i < 8; i++) {
 				if (angle <= 87 || angle >= 93) {
 					dot.setPosition(x0 + start - 10, y0 + getY(start) - 10);
 				} else {
@@ -672,16 +1057,16 @@ class Trajectory{
 	}
 
 	boolean checkCollision(Tank here,int startX,int startY,int angle){
-		for(int i=0;i<here.Bullet.getWidth()*Math.cos(Math.toRadians((angle)));i++){
+		for(int i = 0; i< here.getBullet().getWidth()*Math.cos(Math.toRadians((angle))); i++){
 			if((startX+i>=1600) || (startX+i<=0)){
 				continue;
 			}
 			if(ground.scale.get(startX+i)>=startY+(i)*Math.tan(Math.toRadians((angle)))){
-				ground.modify(startX+i,ground.scale.get(startX+i)-(int)(velocity/3),false);
+				ground.modify(startX+i,ground.scale.get(startX+i)-(int)(velocity/6),false);
 				return true;
 			}
-			if(distance(startX+i,(int)(startY+(i)*Math.tan(Math.toRadians((angle)))),here)<= here.criticalRadius){
-				here.health-=damage;
+			if(distance(startX+i,(int)(startY+(i)*Math.tan(Math.toRadians((angle)))),here)<= here.getCriticalRadius()){
+				here.setHealth((float)(here.getHealth()-damage));
 
 				if(Math.tan(Math.toRadians((angle)))<0){
 					here.impact((int)(velocity)/3,true);
@@ -697,20 +1082,81 @@ class Trajectory{
 	}
 
 	int distance(int x,int y,Tank here){
-		return (int)Math.pow(Math.pow(x-(here.x0+here.center.x),2)+Math.pow(y-(here.y0+here.center.y),2),0.5f);
+		return (int)Math.pow(Math.pow(x-(here.getX0() + here.getCenter().x),2)+Math.pow(y-(here.getY0() + here.getCenter().y),2),0.5f);
 	}
 }
 
 class Healthbar{
-	Texture border=new Texture("Terrain\\healthborder.png");
-	Sprite Border=new Sprite(border,0,0,border.getWidth(), border.getHeight());
-	MyGdxGame game;
-	Texture health;
-	Sprite Health;
-	boolean side;
-	Texture fuelgauge= new Texture("Terrain\\fuel.png");
-	Sprite Fuelgauge = new Sprite(fuelgauge,0,0,fuelgauge.getWidth(),fuelgauge.getHeight());
-	Tank tank;
+	private Texture border=new Texture("Terrain\\healthborder.png");
+	private Sprite Border=new Sprite(border,0,0,border.getWidth(), border.getHeight());
+	private MyGdxGame game;
+
+	public Texture getBorder() {
+		return border;
+	}
+
+	public void setBorder(Sprite border) {
+		Border = border;
+	}
+
+	public MyGdxGame getGame() {
+		return game;
+	}
+
+	public void setGame(MyGdxGame game) {
+		this.game = game;
+	}
+
+	public Texture getHealth() {
+		return health;
+	}
+
+	public void setHealth(Sprite health) {
+		Health = health;
+	}
+
+	public boolean isSide() {
+		return side;
+	}
+
+	public void setSide(boolean side) {
+		this.side = side;
+	}
+
+	public Texture getFuelgauge() {
+		return fuelgauge;
+	}
+
+	public void setFuelgauge(Sprite fuelgauge) {
+		Fuelgauge = fuelgauge;
+	}
+
+	public Tank getTank() {
+		return tank;
+	}
+
+	public void setTank(Tank tank) {
+		this.tank = tank;
+	}
+
+	public void setFuelgauge(Texture fuelgauge) {
+		this.fuelgauge = fuelgauge;
+	}
+
+	public void setHealth(Texture health) {
+		this.health = health;
+	}
+
+	public void setBorder(Texture border) {
+		this.border = border;
+	}
+
+	private Texture health;
+	private Sprite Health;
+	private boolean side;
+	private Texture fuelgauge= new Texture("Terrain\\fuel.png");
+	private Sprite Fuelgauge = new Sprite(fuelgauge,0,0,fuelgauge.getWidth(),fuelgauge.getHeight());
+	private Tank tank;
 	public Healthbar(MyGdxGame game, Texture health, boolean side, Tank tank){
 		this.game=game;
 		this.health= health;
@@ -733,22 +1179,22 @@ class Healthbar{
 			Border.setFlip(true,false);
 			Health.setOrigin(border.getWidth(), 0);
 			Fuelgauge.setOrigin(Fuelgauge.getWidth(),0);
-			Fuelgauge.setPosition(x+ border.getWidth()-Fuelgauge.getWidth(),y-20);
+			Fuelgauge.setPosition(x+ border.getWidth()-Fuelgauge.getWidth(),y-10);
 		}
 		else{
 			x= 47;
 			y= 821;
 			Health.setOrigin(0, 0);
 			Fuelgauge.setOrigin(0,0);
-			Fuelgauge.setPosition(x,y-20);
+			Fuelgauge.setPosition(x,y-10);
 		}
 		Health.setPosition(x,y);
 		Border.setPosition(x,y);
 	}
 
 	void draw(){
-		Health.setScale(tank.health,1);
-		Fuelgauge.setScale(tank.fuel,1);
+		Health.setScale(tank.getHealth(),1);
+		Fuelgauge.setScale(tank.getFuel(),1);
 		Fuelgauge.draw(game.batch);
 		Border.draw(game.batch);
 		Health.draw(game.batch);
