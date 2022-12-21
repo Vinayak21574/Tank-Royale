@@ -12,8 +12,8 @@ public class Pause implements Screen{
     private Element sound=new Element("Buttons\\Bright\\Sound.png","Buttons\\Dim\\Sound.png",700,451);
     private Element music=new Element("Buttons\\Bright\\Music.png","Buttons\\Dim\\Music.png",922,451);
     private Element quit=new Element("Buttons\\Bright\\Back2Menu.png",1144,451);
-    Screen prev;
-    public Pause(MyGdxGame game,Screen history){
+    Play prev;
+    public Pause(MyGdxGame game,Play history){
         this.game=game;
         //dummy constructor
         battlefield.setGame(this.game);
@@ -42,7 +42,7 @@ public class Pause implements Screen{
                 game.setScreen(new Menu(game));
             }
             else if(save.detect()){
-                //
+                prev.ls.save();
             }
             else if(sound.detect()){
                 sound.invert();

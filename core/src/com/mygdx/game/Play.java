@@ -17,7 +17,7 @@ public class Play implements Screen{
     Element map=new Element("Screens\\Fields\\Normal\\map.png",800,450);
     Element pause=new Element("Buttons\\Bright\\Pause.png",800,800);
     Tank tankL,tankR;
-
+    Loadstate ls = new Loadstate(this);
     boolean turn=true;
 
     //Element tank=new Element("Tanks\\Left\\B.png",300,150);

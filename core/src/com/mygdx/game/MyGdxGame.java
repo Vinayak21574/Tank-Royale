@@ -255,6 +255,14 @@ class displayTank {
 
 public class MyGdxGame extends Game {
 	SpriteBatch batch;
+
+	private static MyGdxGame game=null;
+	public static MyGdxGame MyGdxGame_getInstance(){
+		if(game==null){
+			game=new MyGdxGame();
+		}
+		return game;
+	}
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -288,9 +296,9 @@ class Tank {
 	Terrain ground;
 	Texture healthcolour = new Texture("Terrain\\health1.png");
 
-	Texture body=new Texture("Tanks\\Left\\Body.png");
-	Texture cap=new Texture("Tanks\\Left\\CannonCap.png");
-	Texture cannon=new Texture("Tanks\\Left\\Cannon.png");
+	Texture body=new Texture("Tanks\\Left\\A\\Body.png");
+	Texture cap=new Texture("Tanks\\Left\\A\\CannonCap.png");
+	Texture cannon=new Texture("Tanks\\Left\\A\\Cannon.png");
 	Texture bullet=new Texture("Bullet\\Bullet.png");
 
 	Sprite Body=new Sprite(body,0,0, body.getWidth(), body.getHeight());
@@ -300,12 +308,14 @@ class Tank {
 	ArrayList<Sprite> collect=new ArrayList<>();
 
 	int speed=3;
+	int Length=80;
+	int clearance=0;
 	int left=70,right=17;
 	Vector2 center=new Vector2(-25,-25);
 	int criticalRadius=100;
 	float health=1f;
 	float fuel=1;
-	float milage=0;///////////////////////////////////////////////////////
+	float milage=0.01f;///////////////////////////////////////////////////////
 
 	public Tank(MyGdxGame game,Terrain terrain,int startX,int startY,boolean side){
 		this.game= game;
@@ -316,11 +326,10 @@ class Tank {
 		this.x0=startX;
 		this.y0=startY;
 		mine=new Healthbar(game, healthcolour, side,this);
-		mine.setLength( (health));
 		initialise();
 	}
 	void locate(int gap){
-		y0 = ground.scale.get(x0);
+		y0 = ground.scale.get(x0)-clearance;
 
 		x0+=gap;
 
@@ -447,8 +456,8 @@ class Tank {
 	}
 
 	void getTip(double angle){
-		x1=x0+(int)(Math.cos(Math.toRadians(angle))*(80) + Math.sin(Math.toRadians(angle))*0);//length of cannon
-		y1=y0+(int)(Math.sin(Math.toRadians(angle))*(80) + Math.cos(Math.toRadians(angle))*0);
+		x1=x0+(int)(Math.cos(Math.toRadians(angle))*(Length) + Math.sin(Math.toRadians(angle))*0);//length of cannon
+		y1=y0+(int)(Math.sin(Math.toRadians(angle))*(Length) + Math.cos(Math.toRadians(angle))*0);
 	}
 
 
@@ -480,10 +489,17 @@ class Tank {
 	}
 
 	void impact(int distance,boolean right){
+		Gdx.app.log(String.valueOf(distance),String.valueOf(x0));
 		if(right){
+			if(x0>1400){
+				return;
+			}
 			locate(distance);
 		}
 		else{
+			if(x0<200){
+				return;
+			}
 			locate(-distance);
 		}
 	}
@@ -500,6 +516,7 @@ class Trajectory{
 	double velocity;
 	boolean flipped;
 	int slowfactor=5;
+	int rangefactor=4;
 
 	Texture DOT=new Texture("Tracks\\Trackball.png");
 	Sprite dot= new Sprite(DOT,0,0, DOT.getWidth(), DOT.getHeight());
@@ -520,8 +537,11 @@ class Trajectory{
 		if(angle<0){
 			this.angle+=360;
 		}
-		this.velocity=power/6;
-		gap=(int)(power/10);
+		this.velocity=power/rangefactor;
+		gap=(int)(power/6);
+		if(gap>100){
+			gap=100;
+		}
 	}
 
 	double derivative(double x){
@@ -531,7 +551,7 @@ class Trajectory{
 	void draw(boolean valid) {
 		if (valid) {
 
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < 6; i++) {
 				if (angle <= 87 || angle >= 93) {
 					dot.setPosition(x0 + start - 10, y0 + getY(start) - 10);
 				} else {
@@ -590,7 +610,6 @@ class Trajectory{
 			}
 			if(distance(startX+i,(int)(startY+(i)*Math.tan(Math.toRadians((angle)))),here)<= here.criticalRadius){
 				here.health-=0.1;
-				here.mine.setLength(here.health);
 
 				if(Math.tan(Math.toRadians((angle)))<0){
 					here.impact((int)(velocity)/3,true);
@@ -629,9 +648,9 @@ class Healthbar{
 		this.tank = tank;
 	}
 
-	void setLength(float value){
-		Health.setScale(value,1);
-	}
+//	void setLength(float value){
+//		Health.setScale(value,1);
+//	}
 
 	void setPosition(){
 		int x,y;
@@ -656,6 +675,7 @@ class Healthbar{
 	}
 
 	void draw(){
+		Health.setScale(tank.health,1);
 		Fuelgauge.setScale(tank.fuel,1);
 		Fuelgauge.draw(game.batch);
 		Border.draw(game.batch);

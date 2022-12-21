@@ -48,7 +48,10 @@ public class Menu implements Screen {
                 game.setScreen(new Duo(game));
             }
             else if(load.detect()){
-                game.setScreen(new Load(game));
+//                game.setScreen(new Load(game));
+                Play play = new Play(game);
+                play.ls.load();
+                game.setScreen(play);
             }
             else if(settings.detect()){
                 game.setScreen(new Settings(game));

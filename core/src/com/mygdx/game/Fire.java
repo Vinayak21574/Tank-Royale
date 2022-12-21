@@ -33,7 +33,7 @@ public class Fire  implements Screen {
         tank1.draw();
         tank2.draw();
         tank1.traj.follow(tank1.Bullet,tank2,prev);
-//        tank1.initialise();
+        tank1.initialise();
         game.batch.end();
     }
 
