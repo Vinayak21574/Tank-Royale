@@ -22,12 +22,10 @@ public class Duo implements Screen {
         players.setGame(this.game);
         load.setGame(this.game);
         quit.setGame(this.game);
-        name1.setGame(this.game);
         up1.setGame(this.game);
         down1.setGame(this.game);
         tank1.setGame(this.game);
         play.setGame(this.game);
-        name2.setGame(this.game);
         up2.setGame(this.game);
         down2.setGame(this.game);
         tank2.setGame(this.game);
@@ -38,17 +36,24 @@ public class Duo implements Screen {
     private Element players=new Element("Buttons\\Bright\\2Players.png",250,554);
     private Element load=new Element("Buttons\\Dim\\Load.png",250,345);
     private Element quit=new Element("Buttons\\Dim\\Quit.png",250,135);
-    private Element name1=new Element("Buttons\\Dim\\DefaultName.png",790,697);
-    private Element up1=new Element("Buttons\\Dim\\Up.png",790,527);
-    private Element down1=new Element("Buttons\\Bright\\Down.png",790,246);
-    private Element tank1=new Element("Tanks\\Left\\A.png",790,395);
-    private Element name2=new Element("Buttons\\Dim\\DefaultName.png",1309,697);
-    private Element up2=new Element("Buttons\\Dim\\Up.png",1309,527);
-    private Element down2=new Element("Buttons\\Bright\\Down.png",1309,246);
-    private Element tank2=new Element("Tanks\\Right\\A.png",1285,395);
-    private Element play=new Element("Buttons\\Bright\\Play.png",1049,123);
-    private displayTank current1=new displayTank("Left",tank1,up1,down1);
-    private displayTank current2=new displayTank("Right",tank2,up2,down2);
+    private static Element up1=new Element("Buttons\\Dim\\Up.png",776,638);
+    private static Element down1=new Element("Buttons\\Bright\\Down.png",776,327);
+    private static Element tank1=new Element("Tanks\\A\\Full_L.png",776,507);
+    private static Element up2=new Element("Buttons\\Dim\\Up.png",1297,647);
+    private static Element down2=new Element("Buttons\\Bright\\Down.png",1297,327);
+    private static Element tank2=new Element("Tanks\\A\\Full_R.png",1297,507);
+    private Element play=new Element("Buttons\\Bright\\Play.png",1051,133);
+    private static displayTank current1=new displayTank("Left",tank1,up1,down1);
+
+    public static displayTank getCurrent1() {
+        return current1;
+    }
+
+    public static displayTank getCurrent2() {
+        return current2;
+    }
+
+    private static displayTank current2=new displayTank("Right",tank2,up2,down2);
 
     @Override
     public void render(float delta) {
@@ -59,11 +64,9 @@ public class Duo implements Screen {
         players.Draw();
         load.Draw();
         quit.Draw();
-        name1.Draw();
         up1.Draw();
         down1.Draw();
         tank1.Draw();
-        name2.Draw();
         up2.Draw();
         down2.Draw();
         tank2.Draw();
@@ -86,17 +89,11 @@ public class Duo implements Screen {
             else if(down1.detect()){
                 current1.displayNext();
             }
-            else if(name1.detect()){
-                //Todo
-            }
             else if(up2.detect()){
                 current2.displayPrev();
             }
             else if(down2.detect()){
                 current2.displayNext();
-            }
-            else if(name2.detect()){
-                //Todo
             }
             else if(play.detect()){
                 game.setScreen(new Play(game));
@@ -111,11 +108,9 @@ public class Duo implements Screen {
         players.Erase();
         load.Erase();
         quit.Erase();
-        name1.Erase();
         up1.Erase();
         down1.Erase();
         tank1.Erase();
-        name2.Erase();
         up2.Erase();
         down2.Erase();
         tank2.Erase();

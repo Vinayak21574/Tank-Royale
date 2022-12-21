@@ -31,9 +31,9 @@ public class Home implements Screen {
             if(start.detect()){
                 //game.setScreen(new Terrain(game));
 
-                game.setScreen(new Play(game));
+                //game.setScreen(new Play(game));
 
-                //game.setScreen(new Menu(game));
+                game.setScreen(new Menu(game));
             }
             else if(quit.detect()){
                 //TODO quit and start font match
@@ -41,9 +41,9 @@ public class Home implements Screen {
             }
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            game.setScreen(new Play(game));
-        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+//            game.setScreen(new Play(game));
+//        }
 
         game.batch.end();
     }

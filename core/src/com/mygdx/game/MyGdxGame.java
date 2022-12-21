@@ -151,13 +151,12 @@ class Element{
 
 	public void Overwrite(Texture custom){
 		this.txt=custom;
-		game.batch.begin();
+//		game.batch.begin();
 		game.batch.draw(this.txt,this.startX,this.startY);
-		game.batch.end();
+//		game.batch.end();
 	}
 
 	public void Kick(){
-
 		Overwrite(new Texture("Buttons\\Dim\\Blank.png"));
 	}
 
@@ -209,19 +208,23 @@ class displayTank {
 	private ArrayList<Texture> arr=new ArrayList<>();
 	private int count=0;
 
-	public displayTank(String Orient,Element Tank,Element Up,Element Down){
+	public int getCount() {
+		return count;
+	}
+
+	public displayTank(String Orient, Element Tank, Element Up, Element Down){
 		this.here=Tank;
 		this.ArrowUp=Up;
 		this.ArrowDown=Down;
 		if(Objects.equals(Orient, "Left")){
-			arr.add(new Texture("Tanks\\Left\\A.png"));
-			arr.add(new Texture("Tanks\\Left\\B.png"));
-			arr.add(new Texture("Tanks\\Left\\C.png"));
+			arr.add(new Texture("Tanks\\A\\Full_L.png"));
+			arr.add(new Texture("Tanks\\B\\Full_L.png"));
+			arr.add(new Texture("Tanks\\C\\Full_L.png"));
 		}
 		else{
-			arr.add(new Texture("Tanks\\Right\\A.png"));
-			arr.add(new Texture("Tanks\\Right\\B.png"));
-			arr.add(new Texture("Tanks\\Right\\C.png"));
+			arr.add(new Texture("Tanks\\A\\Full_R.png"));
+			arr.add(new Texture("Tanks\\B\\Full_R.png"));
+			arr.add(new Texture("Tanks\\C\\Full_R.png"));
 		}
 	}
 
@@ -296,28 +299,30 @@ class Tank {
 	Terrain ground;
 	Texture healthcolour = new Texture("Terrain\\health1.png");
 
-	Texture body=new Texture("Tanks\\Left\\A\\Body.png");
-	Texture cap=new Texture("Tanks\\Left\\A\\CannonCap.png");
-	Texture cannon=new Texture("Tanks\\Left\\A\\Cannon.png");
-	Texture bullet=new Texture("Bullet\\Bullet.png");
+	Texture body;
+	Texture cap;
+	Texture cannon;
+	Texture bullet;
 
-	Sprite Body=new Sprite(body,0,0, body.getWidth(), body.getHeight());
-	Sprite Cap=new Sprite(cap,0,0, cap.getWidth(), cap.getHeight());
-	Sprite Cannon=new Sprite(cannon,0,0, cannon.getWidth(), cannon.getHeight());
-	Sprite Bullet=new Sprite(bullet,0,0, bullet.getWidth(), bullet.getHeight());
+	Sprite Body;
+	Sprite Cap;
+	Sprite Cannon;
+	Sprite Bullet;
 	ArrayList<Sprite> collect=new ArrayList<>();
 
-	int speed=3;
-	int Length=80;
-	int clearance=0;
-	int left=70,right=17;
-	Vector2 center=new Vector2(-25,-25);
-	int criticalRadius=100;
-	float health=1f;
-	float fuel=1;
-	float milage=0.01f;///////////////////////////////////////////////////////
+	int speed;
+	int Length;
+	int clearance;
+	int left;
+	int right;
+	Vector2 center;
+	int criticalRadius;
+	float health;
+	float fuel;
+	float milage;
 
-	public Tank(MyGdxGame game,Terrain terrain,int startX,int startY,boolean side){
+	public Tank(MyGdxGame game,Terrain terrain,int startX,int startY,boolean side,int choice){
+		preprocessing(choice);
 		this.game= game;
 		collect.add(Body);collect.add(Cannon);collect.add(Cap);
 		traj=new Trajectory(game,ground);
@@ -327,6 +332,72 @@ class Tank {
 		this.y0=startY;
 		mine=new Healthbar(game, healthcolour, side,this);
 		initialise();
+	}
+
+	void preprocessing(int choice){
+		if(choice==0){
+			body=new Texture("Tanks\\A\\Body.png");
+			cap=new Texture("Tanks\\A\\CannonCap.png");
+			cannon=new Texture("Tanks\\A\\Cannon.png");
+			bullet=new Texture("Bullet\\Bullet.png");
+			Body=new Sprite(body,0,0, body.getWidth(), body.getHeight());
+			Cap=new Sprite(cap,0,0, cap.getWidth(), cap.getHeight());
+			Cannon=new Sprite(cannon,0,0, cannon.getWidth(), cannon.getHeight());
+			Bullet=new Sprite(bullet,0,0, bullet.getWidth(), bullet.getHeight());
+
+			speed=3;
+			Length=80;
+			clearance=0;
+			left=70;
+			right=17;
+			center=new Vector2(-25,-25);
+			criticalRadius=100;
+			health=1f;
+			fuel=1;
+			milage=0.01f;
+		}
+		else if(choice==1){
+			body=new Texture("Tanks\\B\\Body.png");
+			cap=new Texture("Tanks\\B\\CannonCap.png");
+			cannon=new Texture("Tanks\\B\\Cannon.png");
+			bullet=new Texture("Bullet\\Bullet.png");
+			Body=new Sprite(body,0,0, body.getWidth(), body.getHeight());
+			Cap=new Sprite(cap,0,0, cap.getWidth(), cap.getHeight());
+			Cannon=new Sprite(cannon,0,0, cannon.getWidth(), cannon.getHeight());
+			Bullet=new Sprite(bullet,0,0, bullet.getWidth(), bullet.getHeight());
+
+			speed=3;
+			Length=120;
+			clearance=15;
+			left=20;
+			right=65;
+			center=new Vector2(17,4);
+			criticalRadius=90;
+			health=1f;
+			fuel=1;
+			milage=0.01f;
+		}
+		else{
+			body=new Texture("Tanks\\C\\Body.png");
+			cap=new Texture("Tanks\\C\\CannonCap.png");
+			cannon=new Texture("Tanks\\C\\Cannon.png");
+			bullet=new Texture("Bullet\\Bullet.png");
+			Body=new Sprite(body,0,0, body.getWidth(), body.getHeight());
+			Cap=new Sprite(cap,0,0, cap.getWidth(), cap.getHeight());
+			Cannon=new Sprite(cannon,0,0, cannon.getWidth(), cannon.getHeight());
+			Bullet=new Sprite(bullet,0,0, bullet.getWidth(), bullet.getHeight());
+
+			speed=3;
+			clearance=0;
+			Length=100;
+			left=73;
+			right=33;
+			center=new Vector2(-17,-20);
+			criticalRadius=120;
+			health=1f;
+			fuel=1;
+			milage=0;
+		}
 	}
 	void locate(int gap){
 		y0 = ground.scale.get(x0)-clearance;
@@ -514,6 +585,7 @@ class Trajectory{
 	int gap;
 	double angle;
 	double velocity;
+	double damage;
 	boolean flipped;
 	int slowfactor=5;
 	int rangefactor=4;
@@ -609,7 +681,7 @@ class Trajectory{
 				return true;
 			}
 			if(distance(startX+i,(int)(startY+(i)*Math.tan(Math.toRadians((angle)))),here)<= here.criticalRadius){
-				here.health-=0.1;
+				here.health-=damage;
 
 				if(Math.tan(Math.toRadians((angle)))<0){
 					here.impact((int)(velocity)/3,true);

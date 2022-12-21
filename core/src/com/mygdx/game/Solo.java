@@ -23,25 +23,14 @@ public class Solo implements Screen {
         players.setGame(this.game);
         load.setGame(this.game);
         quit.setGame(this.game);
-        name.setGame(this.game);
-        up.setGame(this.game);
-        down.setGame(this.game);
-        tank.setGame(this.game);
-        play.setGame(this.game);
     }
 
-    private Element menu=new Element("Screens\\Overflown.png",800,450);
+    private Element menu=new Element("Screens\\FutureRelease.png",800,450);
     private Element player=new Element("Buttons\\Bright\\1Player.png",250,765);
     private Element players=new Element("Buttons\\Dim\\2Players.png",250,554);
     private Element load=new Element("Buttons\\Dim\\Load.png",250,345);
     private Element quit=new Element("Buttons\\Dim\\Quit.png",250,135);
-    private Element name=new Element("Buttons\\Dim\\DefaultName.png",1049,675);
-    private Element up=new Element("Buttons\\Dim\\Up.png",1049,556);
-    private Element down=new Element("Buttons\\Bright\\Down.png",1049,265);
-    private Element tank=new Element("Tanks\\Left\\A.png",1049,425);
-    private Element play=new Element("Buttons\\Bright\\Play.png",1049,123);
 
-    private displayTank current=new displayTank("Left",tank,up,down);
     private Texture selected=new Texture("Buttons\\Bright\\EnterName.png");
 
     @Override
@@ -53,11 +42,6 @@ public class Solo implements Screen {
         players.Draw();
         load.Draw();
         quit.Draw();
-        name.Draw();
-        up.Draw();
-        down.Draw();
-        tank.Draw();
-        play.Draw();
         game.batch.end();
 
         if(Gdx.input.justTouched()){
@@ -70,19 +54,6 @@ public class Solo implements Screen {
             else if(load.detect()){
                 game.setScreen(new Load(game));
             }
-            else if(up.detect()){
-                current.displayPrev();
-            }
-            else if(down.detect()){
-                current.displayNext();
-            }
-            else if(name.detect()){
-                name.Overwrite(selected);
-
-            }
-            else if(play.detect()){
-                game.setScreen(new Play(game));
-            }
         }
     }
 
@@ -93,11 +64,6 @@ public class Solo implements Screen {
         players.Erase();
         load.Erase();
         quit.Erase();
-        name.Erase();
-        up.Erase();
-        down.Erase();
-        tank.Erase();
-        play.Erase();
     }
 
     @Override
