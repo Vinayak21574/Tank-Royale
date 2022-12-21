@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class Fire  implements Screen {
@@ -31,7 +32,8 @@ public class Fire  implements Screen {
         current.Draw();
         tank1.draw();
         tank2.draw();
-        tank1.traj.follow(tank1.Bullet,prev);
+        tank1.traj.follow(tank1.Bullet,tank2,prev);
+//        tank1.initialise();
         game.batch.end();
     }
 

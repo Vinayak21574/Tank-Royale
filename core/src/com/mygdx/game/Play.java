@@ -55,7 +55,7 @@ public class Play implements Screen{
             Gdx.app.log("x>", String.valueOf(Gdx.input.getX()));
             Gdx.app.log("y>", String.valueOf(900-Gdx.input.getY()));
             if(pause.detect()){
-                game.setScreen(new Pause(game));
+                game.setScreen(new Pause(game,this));
             }
         }
 

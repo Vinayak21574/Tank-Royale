@@ -280,18 +280,13 @@ class Tank {
 	float Gangle=0;
 	boolean flipped=false;
 	double power;
-	int speed=3;
-	Vector2 lFEET=new Vector2();
-	Vector2 rFEET=new Vector2();
-	int left=70,right=17;
-	Terrain ground;
-
-	Texture healthcolour = new Texture("Terrain\\health1.png");
-	float health=0.5f;
 	Healthbar mine;
-
 	MyGdxGame game;
 	Trajectory traj;
+	Vector2 lFEET=new Vector2();
+	Vector2 rFEET=new Vector2();
+	Terrain ground;
+	Texture healthcolour = new Texture("Terrain\\health1.png");
 
 	Texture body=new Texture("Tanks\\Left\\Body.png");
 	Texture cap=new Texture("Tanks\\Left\\CannonCap.png");
@@ -303,8 +298,14 @@ class Tank {
 	Sprite Cannon=new Sprite(cannon,0,0, cannon.getWidth(), cannon.getHeight());
 	Sprite Bullet=new Sprite(bullet,0,0, bullet.getWidth(), bullet.getHeight());
 	ArrayList<Sprite> collect=new ArrayList<>();
+
+	int speed=3;
+	int left=70,right=17;
+	Vector2 center=new Vector2(-25,-25);
+	int criticalRadius=100;
+	float health=1f;
 	float fuel=1;
-	float milage=0.01f;
+	float milage=0;///////////////////////////////////////////////////////
 
 	public Tank(MyGdxGame game,Terrain terrain,int startX,int startY,boolean side){
 		this.game= game;
@@ -314,7 +315,7 @@ class Tank {
 		this.ground=terrain;
 		this.x0=startX;
 		this.y0=startY;
-		mine=new Healthbar(game, healthcolour, side);
+		mine=new Healthbar(game, healthcolour, side,this);
 		mine.setLength( (health));
 		initialise();
 	}
@@ -478,6 +479,15 @@ class Tank {
 		fuel=1;
 	}
 
+	void impact(int distance,boolean right){
+		if(right){
+			locate(distance);
+		}
+		else{
+			locate(-distance);
+		}
+	}
+
 }
 
 class Trajectory{
@@ -549,12 +559,12 @@ class Trajectory{
 		}
 	}
 
-	void follow(Sprite missile,Screen prev){
+	void follow(Sprite missile,Tank enemy,Screen prev){
 		int x=(int)(x0+velocity*Math.cos(Math.toRadians(angle))*start/slowfactor-30);
 		int y=(int)(y0+velocity*Math.sin(Math.toRadians(angle))*start/slowfactor-5*start*start/(slowfactor*slowfactor)-6);
 		int theta=(int)derivative(velocity*Math.cos(Math.toRadians(angle))*start/slowfactor);
 		//Gdx.app.log("Angle",String.valueOf(derivative(start)));
-		boolean collided=checkCollision(missile,x,y,theta);
+		boolean collided=checkCollision(enemy,x,y,theta);
 		if((x<1600 && x>0) && (y>=0) && !collided){
 			missile.setOrigin(missile.getWidth()/2, missile.getHeight()/2);
 			missile.setRotation(theta);
@@ -566,15 +576,37 @@ class Trajectory{
 			start=0;
 			game.setScreen(prev);
 		}
+		enemy.initialise();
 	}
 
-	boolean checkCollision(Sprite missile,int startX,int startY,int angle){
-		for(int i=0;i<missile.getWidth()*Math.cos(Math.toRadians((angle)));i++){
-			if(ground.scale.get(startX+i)<=startY+startX*Math.tan(Math.toRadians((angle)))){
+	boolean checkCollision(Tank here,int startX,int startY,int angle){
+		for(int i=0;i<here.Bullet.getWidth()*Math.cos(Math.toRadians((angle)));i++){
+			if((startX+i>=1600) || (startX+i<=0)){
+				continue;
+			}
+			if(ground.scale.get(startX+i)>=startY+(i)*Math.tan(Math.toRadians((angle)))){
+				ground.modify(startX+i,ground.scale.get(startX+i)-(int)(velocity/3),false);
+				return true;
+			}
+			if(distance(startX+i,(int)(startY+(i)*Math.tan(Math.toRadians((angle)))),here)<= here.criticalRadius){
+				here.health-=0.1;
+				here.mine.setLength(here.health);
+
+				if(Math.tan(Math.toRadians((angle)))<0){
+					here.impact((int)(velocity)/3,true);
+				}
+				else{
+					here.impact((int)(velocity)/3,false);
+				}
+
 				return true;
 			}
 		}
 		return false;
+	}
+
+	int distance(int x,int y,Tank here){
+		return (int)Math.pow(Math.pow(x-(here.x0+here.center.x),2)+Math.pow(y-(here.y0+here.center.y),2),0.5f);
 	}
 }
 
@@ -585,12 +617,16 @@ class Healthbar{
 	Texture health;
 	Sprite Health;
 	boolean side;
-	public Healthbar(MyGdxGame game, Texture health, boolean side){
+	Texture fuelgauge= new Texture("Terrain\\fuel.png");
+	Sprite Fuelgauge = new Sprite(fuelgauge,0,0,fuelgauge.getWidth(),fuelgauge.getHeight());
+	Tank tank;
+	public Healthbar(MyGdxGame game, Texture health, boolean side, Tank tank){
 		this.game=game;
 		this.health= health;
 		this.Health= new Sprite(health,0,0,health.getWidth(),health.getHeight());
 		this.side = side;
 		this.setPosition();
+		this.tank = tank;
 	}
 
 	void setLength(float value){
@@ -605,23 +641,28 @@ class Healthbar{
 			Health.setFlip(true,false);
 			Border.setFlip(true,false);
 			Health.setOrigin(border.getWidth(), 0);
+			Fuelgauge.setOrigin(Fuelgauge.getWidth(),0);
+			Fuelgauge.setPosition(x+ border.getWidth()-Fuelgauge.getWidth(),y-20);
 		}
 		else{
 			x= 47;
 			y= 821;
 			Health.setOrigin(0, 0);
+			Fuelgauge.setOrigin(0,0);
+			Fuelgauge.setPosition(x,y-20);
 		}
 		Health.setPosition(x,y);
 		Border.setPosition(x,y);
 	}
 
 	void draw(){
+		Fuelgauge.setScale(tank.fuel,1);
+		Fuelgauge.draw(game.batch);
 		Border.draw(game.batch);
 		Health.draw(game.batch);
 	}
 
 }
-
 class Weapon extends Bullet {
 	private float power;
 	private Element type;
